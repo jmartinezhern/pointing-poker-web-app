@@ -1,0 +1,50 @@
+parser: '@typescript-eslint/parser'
+parserOptions:
+  project: tsconfig.json
+  ecmaVersion: 2018
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
+plugins:
+  - react-hooks
+extends:
+  - plugin:react/recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:prettier/recommended
+  - prettier/@typescript-eslint
+  - prettier/react
+  - plugin:import/errors
+  - plugin:import/warnings
+  - plugin:import/typescript
+settings:
+  react:
+    version: detect
+rules:
+  quotes: [ error, single ]
+  arrow-parens: [ error, as-needed ]
+  semi: [ error, never ]
+  no-unused-vars: warn
+  no-unused-expressions: warn
+  '@typescript-eslint/no-floating-promises': error
+  no-return-await: error
+  require-await: error
+  '@typescript-eslint/explicit-function-return-type':
+    - error
+    - allowExpressions: true
+      allowTypedFunctionExpressions: true
+      allowHigherOrderFunctions: true
+  import/order:
+    - error
+    - groups: [ builtin, external, unknown, parent, sibling, index ]
+      newlines-between: always
+  import/group-exports: error
+  react-hooks/rules-of-hooks: error
+  react-hooks/exhaustive-deps: error
+  '@typescript-eslint/no-parameter-properties': off
+  '@typescript-eslint/no-use-before-define': off
+
+  # dont need prop types since we are using static types
+  react/prop-types: off
+
+  # rely on ts to resolve modules
+  import/no-unresolved: off

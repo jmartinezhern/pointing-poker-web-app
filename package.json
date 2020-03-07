@@ -1,0 +1,111 @@
+{
+  "name": "pointing-poker-web-app",
+  "repository": "github.com/jmartinezhern/pointing-poker",
+  "version": "0.0.1",
+  "description": "Web Application for pointingpoker.io",
+  "author": "Jorge Martinez Hernandez",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://pointingpoker.io",
+  "scripts": {
+    "clean": "rm -rf ./dist ./.cache ./node_modules ./src/graphql/generated-types.ts",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "commit": "git-cz",
+    "tsc:check": "tsc --noEmit -p .",
+    "eslint:check": "eslint 'src/**/*.{ts,tsx}'",
+    "test": "jest --runInBand",
+    "test:coverage": "npm run test -- --coverage",
+    "build": "NODE_ENV=production npm run codegen && parcel build --no-cache src/index.html",
+    "dev": "NODE_ENV=development npm run codegen && parcel --no-cache src/index.html",
+    "test:watch": "jest --watch",
+    "storybook:start": "start-storybook",
+    "storybook:build": "build-storybook -c .storybook -o dist-storybook",
+    "eslint:fix": "eslint --fix 'src/**/*.{ts,tsx}'"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "setupFiles": [
+      "./src/setupTests.ts"
+    ],
+    "moduleNameMapper": {
+      "^~(.*)$": "<rootDir>/src/$1"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">1% in US",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@material-ui/core": "4.9.5",
+    "@material-ui/icons": "4.9.1",
+    "apollo-cache-inmemory": "1.6.5",
+    "apollo-client": "2.6.8",
+    "apollo-link-context": "1.0.19",
+    "apollo-link-http": "1.5.16",
+    "graphql": "14.6.0",
+    "react": "16.13.0",
+    "react-apollo": "3.1.3",
+    "react-apollo-hooks": "0.5.0",
+    "react-dom": "16.13.0",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.12.2",
+    "@graphql-codegen/introspection": "1.12.2",
+    "@graphql-codegen/typescript": "1.12.2",
+    "@graphql-codegen/typescript-operations": "1.12.2",
+    "@graphql-codegen/typescript-react-apollo": "1.12.2",
+    "@graphql-codegen/typescript-resolvers": "1.12.2",
+    "@storybook/addon-actions": "5.3.14",
+    "@storybook/addon-links": "5.3.14",
+    "@storybook/addon-notes": "5.3.14",
+    "@storybook/addons": "5.3.14",
+    "@storybook/cli": "5.3.14",
+    "@storybook/react": "5.3.14",
+    "@types/enzyme": "3.10.5",
+    "@types/enzyme-adapter-react-16": "1.0.6",
+    "@types/graphql": "14.5.0",
+    "@types/jest": "25.1.4",
+    "@types/node": "13.9.0",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.5",
+    "@types/storybook__react": "5.2.1",
+    "@types/uuid": "7.0.0",
+    "@typescript-eslint/eslint-plugin": "2.22.0",
+    "@typescript-eslint/parser": "2.22.0",
+    "babel-loader": "8.0.6",
+    "babel-types": "6.26.0",
+    "codecov": "3.6.5",
+    "commitizen": "4.0.3",
+    "cz-conventional-changelog": "3.1.0",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.2",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-hooks": "2.5.0",
+    "jest": "25.1.0",
+    "less": "3.11.1",
+    "parcel-bundler": "1.12.4",
+    "prettier": "1.19.1",
+    "ts-jest": "25.2.1",
+    "ts-loader": "6.2.1",
+    "tsconfig-paths-webpack-plugin": "3.2.0",
+    "typescript": "3.8.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  }
+}

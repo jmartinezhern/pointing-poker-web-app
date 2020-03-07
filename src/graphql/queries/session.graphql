@@ -1,0 +1,5 @@
+query Session($sessionID: ID!) {
+    session(sessionID: $sessionID) {
+        id
+    }
+}
