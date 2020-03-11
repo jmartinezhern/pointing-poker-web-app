@@ -1,0 +1,15 @@
+subscription ParticipantJoined($sessionID: ID!) {
+    participantJoinedSession(id: $sessionID) {
+        id
+        name
+        participants {
+            id
+            name
+            isModerator
+            vote {
+                points
+                abstained
+            }
+        }
+    }
+}

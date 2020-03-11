@@ -1,5 +1,27 @@
-query Session($sessionID: ID!) {
+query getSession($sessionID: ID!, $userID: ID!) {
     session(sessionID: $sessionID) {
         id
+        name
+        pointingMax
+        pointingMin
+        votingStarted
+        reviewingIssue {
+            title
+            url
+            description
+        }
+        participants {
+            id
+            name
+            isModerator
+            vote {
+                points
+                abstained
+            }
+        }
+    }
+
+    participant(id: $userID) {
+        isModerator
     }
 }
