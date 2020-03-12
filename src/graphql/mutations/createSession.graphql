@@ -1,17 +1,12 @@
-mutation CreateSession($name: String!, $pointingMin: Int!, $pointingMax: Int!, $moderatorName: String!) {
+mutation CreateSession($name: String!, $pointingMin: Int!, $pointingMax: Int!, $moderator: ParticipantDescription!) {
     createSession(
         sessionDescription: {
             name: $name,
             pointingMin: $pointingMin,
             pointingMax: $pointingMax,
         },
-        moderator: {
-            name: $moderatorName,
-        }
+        moderator: $moderator,
     ) {
         id
-        participants {
-            id
-        }
     }
 }

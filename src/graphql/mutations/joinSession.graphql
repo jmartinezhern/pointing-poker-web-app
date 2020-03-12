@@ -1,0 +1,15 @@
+mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
+    joinSession(sessionID: $sessionID, participant: $participant) {
+        id
+        name
+        participants {
+            id
+            name
+            isModerator
+            vote {
+                points
+                abstained
+            }
+        }
+    }
+}

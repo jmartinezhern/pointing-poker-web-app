@@ -1,9 +1,14 @@
 import React, { FunctionComponent } from 'react'
 import { Container, Grid, Typography } from '@material-ui/core'
 
-import { useGetSessionQuery, useParticipantJoinedSubscription, Participant as ParticipantType } from '~generated/graphql'
+import {
+  useGetSessionQuery,
+  useParticipantJoinedSubscription,
+  Participant as ParticipantType,
+} from '~generated/graphql'
 import { Participant } from '~components/session/Participant'
 import { ReviewingIssue } from '~components/session/ReviewingIssue'
+import { JoinSession } from '~components/session/JoinSession'
 
 const sessionID = '659d86ae-ec0c-4170-9866-b436a981ce29'
 const userID = 'ae90dca2-2704-47fe-925f-e2106f273816'
@@ -52,6 +57,7 @@ export const Session: FunctionComponent = () => {
 
     return (
       <Container>
+        <JoinSession />
         <Grid container justify="center" spacing={2} style={{ marginTop: '50px' }}>
           <Grid item>
             <Typography variant="h2">{session.name}</Typography>

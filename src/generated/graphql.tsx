@@ -86,6 +86,7 @@ export type Participant = {
 };
 
 export type ParticipantDescription = {
+  id: Scalars['ID'];
   name: Scalars['String'];
 };
 
@@ -186,7 +187,7 @@ export type CreateSessionMutationVariables = {
   name: Scalars['String'];
   pointingMin: Scalars['Int'];
   pointingMax: Scalars['Int'];
-  moderatorName: Scalars['String'];
+  moderator: ParticipantDescription;
 };
 
 
@@ -195,9 +196,27 @@ export type CreateSessionMutation = (
   & { createSession: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id'>
+  )> }
+);
+
+export type JoinSessionMutationVariables = {
+  sessionID: Scalars['ID'];
+  participant?: Maybe<ParticipantDescription>;
+};
+
+
+export type JoinSessionMutation = (
+  { __typename?: 'Mutation' }
+  & { joinSession: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name'>
     & { participants: Array<(
       { __typename?: 'Participant' }
-      & Pick<Participant, 'id'>
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
     )> }
   )> }
 );
@@ -253,12 +272,9 @@ export type ParticipantJoinedSubscription = (
 
 
 export const CreateSessionDocument = gql`
-    mutation CreateSession($name: String!, $pointingMin: Int!, $pointingMax: Int!, $moderatorName: String!) {
-  createSession(sessionDescription: {name: $name, pointingMin: $pointingMin, pointingMax: $pointingMax}, moderator: {name: $moderatorName}) {
+    mutation CreateSession($name: String!, $pointingMin: Int!, $pointingMax: Int!, $moderator: ParticipantDescription!) {
+  createSession(sessionDescription: {name: $name, pointingMin: $pointingMin, pointingMax: $pointingMax}, moderator: $moderator) {
     id
-    participants {
-      id
-    }
   }
 }
     `;
@@ -280,7 +296,7 @@ export type CreateSessionMutationFn = ApolloReactCommon.MutationFunction<CreateS
  *      name: // value for 'name'
  *      pointingMin: // value for 'pointingMin'
  *      pointingMax: // value for 'pointingMax'
- *      moderatorName: // value for 'moderatorName'
+ *      moderator: // value for 'moderator'
  *   },
  * });
  */
@@ -290,6 +306,49 @@ export function useCreateSessionMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
 export type CreateSessionMutationResult = ApolloReactCommon.MutationResult<CreateSessionMutation>;
 export type CreateSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
+export const JoinSessionDocument = gql`
+    mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
+  joinSession(sessionID: $sessionID, participant: $participant) {
+    id
+    name
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type JoinSessionMutationFn = ApolloReactCommon.MutationFunction<JoinSessionMutation, JoinSessionMutationVariables>;
+
+/**
+ * __useJoinSessionMutation__
+ *
+ * To run a mutation, you first call `useJoinSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinSessionMutation, { data, loading, error }] = useJoinSessionMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *      participant: // value for 'participant'
+ *   },
+ * });
+ */
+export function useJoinSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<JoinSessionMutation, JoinSessionMutationVariables>) {
+        return ApolloReactHooks.useMutation<JoinSessionMutation, JoinSessionMutationVariables>(JoinSessionDocument, baseOptions);
+      }
+export type JoinSessionMutationHookResult = ReturnType<typeof useJoinSessionMutation>;
+export type JoinSessionMutationResult = ApolloReactCommon.MutationResult<JoinSessionMutation>;
+export type JoinSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinSessionMutation, JoinSessionMutationVariables>;
 export const GetSessionDocument = gql`
     query getSession($sessionID: ID!, $userID: ID!) {
   session(sessionID: $sessionID) {

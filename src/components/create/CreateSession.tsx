@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
 import { Button, Grid, Slider, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { v4 as uuidv4 } from 'uuid'
 
 import { useCreateSessionMutation } from '~generated/graphql'
 
@@ -17,14 +18,7 @@ export const CreateSession: FunctionComponent = () => {
   const [sessionName, setSessionName] = useState<string>('')
   const [moderatorName, setModeratorName] = useState<string>('')
 
-  const [createSessionMutation, { data }] = useCreateSessionMutation({
-    variables: {
-      pointingMax: fibSeq[pointingRange[1]],
-      pointingMin: fibSeq[pointingRange[0]],
-      name: sessionName,
-      moderatorName: moderatorName,
-    },
-  })
+  const [createSessionMutation, { data }] = useCreateSessionMutation()
 
   const getSessionNameProblem = (): string | null => {
     if (sessionName.length == 0) {
@@ -61,17 +55,31 @@ export const CreateSession: FunctionComponent = () => {
   }
 
   const createButtonClicked = async (): Promise<void> => {
-    await createSessionMutation()
+    const { data } = await createSessionMutation({
+      variables: {
+        pointingMax: fibSeq[pointingRange[1]],
+        pointingMin: fibSeq[pointingRange[0]],
+        name: sessionName,
+        moderator: {
+          id: '',
+          name: moderatorName,
+        },
+      },
+    })
+
+    const sessionData = {
+      participantID: uuidv4(),
+    }
+
+    if (data?.createSession) {
+      localStorage.setItem(data.createSession.id, sessionData.participantID)
+    }
   }
 
   useEffect(() => {
     const sessionID = data?.createSession?.id
-    const participants = data?.createSession?.participants
 
-    if (sessionID && participants) {
-      localStorage.setItem('pointingPokerSessionID', sessionID)
-      localStorage.setItem('pointingPokerUserID', participants[0].id)
-
+    if (sessionID) {
       window.location.replace(`http://localhost:1234/${sessionID}`)
     }
   }, [data])
