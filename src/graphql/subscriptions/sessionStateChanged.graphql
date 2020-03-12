@@ -1,7 +1,12 @@
-subscription ParticipantJoined($sessionID: ID!) {
-    participantJoinedSession(id: $sessionID) {
+subscription SessionStateChanged($sessionID: ID!) {
+    sessionStateChanged(id: $sessionID) {
         id
         name
+        reviewingIssue {
+            url
+            title
+            description
+        }
         participants {
             id
             name

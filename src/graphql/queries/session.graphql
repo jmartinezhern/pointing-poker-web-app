@@ -1,4 +1,4 @@
-query getSession($sessionID: ID!, $userID: ID!) {
+query getSession($sessionID: ID!, $participantID: ID!) {
     session(sessionID: $sessionID) {
         id
         name
@@ -21,7 +21,7 @@ query getSession($sessionID: ID!, $userID: ID!) {
         }
     }
 
-    participant(id: $userID) {
+    participant(id: $participantID) {
         isModerator
     }
 }

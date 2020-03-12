@@ -2,6 +2,11 @@ mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
     joinSession(sessionID: $sessionID, participant: $participant) {
         id
         name
+        reviewingIssue {
+            url
+            title
+            description
+        }
         participants {
             id
             name

@@ -27,7 +27,7 @@ export const Participant: FunctionComponent<ParticipantProps> = ({ participant: 
         </Typography>
         {!isModerator && (
           <Typography variant="subtitle1" component="h4">
-            {vote?.abstained ? 'Abstained from voting' : `Voted with a ${vote}`}
+            {vote?.abstained ? 'Abstained from voting' : `Voted with a ${vote?.points}`}
           </Typography>
         )}
       </CardContent>

@@ -140,35 +140,11 @@ export type SessionDescription = {
 
 export type Subscription = {
    __typename?: 'Subscription';
-  voteWasSet?: Maybe<Session>;
-  votingWasStarted?: Maybe<Session>;
-  votingWasStopped?: Maybe<Session>;
-  participantJoinedSession?: Maybe<Session>;
-  sessionWasClosed?: Maybe<Session>;
+  sessionStateChanged?: Maybe<Session>;
 };
 
 
-export type SubscriptionVoteWasSetArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type SubscriptionVotingWasStartedArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type SubscriptionVotingWasStoppedArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type SubscriptionParticipantJoinedSessionArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type SubscriptionSessionWasClosedArgs = {
+export type SubscriptionSessionStateChangedArgs = {
   id: Scalars['ID'];
 };
 
@@ -210,7 +186,10 @@ export type JoinSessionMutation = (
   & { joinSession: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name'>
-    & { participants: Array<(
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -223,7 +202,7 @@ export type JoinSessionMutation = (
 
 export type GetSessionQueryVariables = {
   sessionID: Scalars['ID'];
-  userID: Scalars['ID'];
+  participantID: Scalars['ID'];
 };
 
 
@@ -249,17 +228,20 @@ export type GetSessionQuery = (
   )> }
 );
 
-export type ParticipantJoinedSubscriptionVariables = {
+export type SessionStateChangedSubscriptionVariables = {
   sessionID: Scalars['ID'];
 };
 
 
-export type ParticipantJoinedSubscription = (
+export type SessionStateChangedSubscription = (
   { __typename?: 'Subscription' }
-  & { participantJoinedSession: Maybe<(
+  & { sessionStateChanged: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name'>
-    & { participants: Array<(
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -311,6 +293,11 @@ export const JoinSessionDocument = gql`
   joinSession(sessionID: $sessionID, participant: $participant) {
     id
     name
+    reviewingIssue {
+      url
+      title
+      description
+    }
     participants {
       id
       name
@@ -350,7 +337,7 @@ export type JoinSessionMutationHookResult = ReturnType<typeof useJoinSessionMuta
 export type JoinSessionMutationResult = ApolloReactCommon.MutationResult<JoinSessionMutation>;
 export type JoinSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinSessionMutation, JoinSessionMutationVariables>;
 export const GetSessionDocument = gql`
-    query getSession($sessionID: ID!, $userID: ID!) {
+    query getSession($sessionID: ID!, $participantID: ID!) {
   session(sessionID: $sessionID) {
     id
     name
@@ -372,7 +359,7 @@ export const GetSessionDocument = gql`
       }
     }
   }
-  participant(id: $userID) {
+  participant(id: $participantID) {
     isModerator
   }
 }
@@ -391,7 +378,7 @@ export const GetSessionDocument = gql`
  * const { data, loading, error } = useGetSessionQuery({
  *   variables: {
  *      sessionID: // value for 'sessionID'
- *      userID: // value for 'userID'
+ *      participantID: // value for 'participantID'
  *   },
  * });
  */
@@ -404,11 +391,16 @@ export function useGetSessionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type GetSessionQueryHookResult = ReturnType<typeof useGetSessionQuery>;
 export type GetSessionLazyQueryHookResult = ReturnType<typeof useGetSessionLazyQuery>;
 export type GetSessionQueryResult = ApolloReactCommon.QueryResult<GetSessionQuery, GetSessionQueryVariables>;
-export const ParticipantJoinedDocument = gql`
-    subscription ParticipantJoined($sessionID: ID!) {
-  participantJoinedSession(id: $sessionID) {
+export const SessionStateChangedDocument = gql`
+    subscription SessionStateChanged($sessionID: ID!) {
+  sessionStateChanged(id: $sessionID) {
     id
     name
+    reviewingIssue {
+      url
+      title
+      description
+    }
     participants {
       id
       name
@@ -423,23 +415,23 @@ export const ParticipantJoinedDocument = gql`
     `;
 
 /**
- * __useParticipantJoinedSubscription__
+ * __useSessionStateChangedSubscription__
  *
- * To run a query within a React component, call `useParticipantJoinedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useParticipantJoinedSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useSessionStateChangedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSessionStateChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useParticipantJoinedSubscription({
+ * const { data, loading, error } = useSessionStateChangedSubscription({
  *   variables: {
  *      sessionID: // value for 'sessionID'
  *   },
  * });
  */
-export function useParticipantJoinedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<ParticipantJoinedSubscription, ParticipantJoinedSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<ParticipantJoinedSubscription, ParticipantJoinedSubscriptionVariables>(ParticipantJoinedDocument, baseOptions);
+export function useSessionStateChangedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<SessionStateChangedSubscription, SessionStateChangedSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<SessionStateChangedSubscription, SessionStateChangedSubscriptionVariables>(SessionStateChangedDocument, baseOptions);
       }
-export type ParticipantJoinedSubscriptionHookResult = ReturnType<typeof useParticipantJoinedSubscription>;
-export type ParticipantJoinedSubscriptionResult = ApolloReactCommon.SubscriptionResult<ParticipantJoinedSubscription>;
+export type SessionStateChangedSubscriptionHookResult = ReturnType<typeof useSessionStateChangedSubscription>;
+export type SessionStateChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<SessionStateChangedSubscription>;
