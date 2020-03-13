@@ -45,7 +45,7 @@ export const JoinSession: FunctionComponent = () => {
   }
 
   return (
-    <Grid container item spacing={2} direction="row" alignItems="center">
+    <Grid container item spacing={2} justify="center" direction="row" alignItems="center">
       <Grid item>
         <TextField
           id="participant-name"

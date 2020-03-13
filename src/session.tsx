@@ -6,10 +6,8 @@ import { ThemeProvider } from '@material-ui/styles'
 import { Session } from '~components/session/Session'
 import { GraphQLProvider } from '~graphql/GraphQLProvider'
 
-const defaultTheme = createMuiTheme()
-
 const Root = (
-  <ThemeProvider theme={defaultTheme}>
+  <ThemeProvider theme={createMuiTheme()}>
     <CssBaseline />
     <GraphQLProvider>
       <Session />

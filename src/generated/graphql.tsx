@@ -185,7 +185,81 @@ export type JoinSessionMutation = (
   { __typename?: 'Mutation' }
   & { joinSession: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name'>
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
+      { __typename?: 'Participant' }
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
+    )> }
+  )> }
+);
+
+export type SetVoteMutationVariables = {
+  sessionID: Scalars['ID'];
+  participantID: Scalars['ID'];
+  vote: VoteDescription;
+};
+
+
+export type SetVoteMutation = (
+  { __typename?: 'Mutation' }
+  & { setVote: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
+      { __typename?: 'Participant' }
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
+    )> }
+  )> }
+);
+
+export type StartVotingMutationVariables = {
+  sessionID: Scalars['ID'];
+};
+
+
+export type StartVotingMutation = (
+  { __typename?: 'Mutation' }
+  & { startVoting: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
+      { __typename?: 'Participant' }
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
+    )> }
+  )> }
+);
+
+export type StopVotingMutationVariables = {
+  sessionID: Scalars['ID'];
+};
+
+
+export type StopVotingMutation = (
+  { __typename?: 'Mutation' }
+  & { stopVoting: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
     & { reviewingIssue: Maybe<(
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
@@ -237,7 +311,7 @@ export type SessionStateChangedSubscription = (
   { __typename?: 'Subscription' }
   & { sessionStateChanged: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name'>
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
     & { reviewingIssue: Maybe<(
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
@@ -293,6 +367,7 @@ export const JoinSessionDocument = gql`
   joinSession(sessionID: $sessionID, participant: $participant) {
     id
     name
+    votingStarted
     reviewingIssue {
       url
       title
@@ -336,6 +411,152 @@ export function useJoinSessionMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type JoinSessionMutationHookResult = ReturnType<typeof useJoinSessionMutation>;
 export type JoinSessionMutationResult = ApolloReactCommon.MutationResult<JoinSessionMutation>;
 export type JoinSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinSessionMutation, JoinSessionMutationVariables>;
+export const SetVoteDocument = gql`
+    mutation SetVote($sessionID: ID!, $participantID: ID!, $vote: VoteDescription!) {
+  setVote(sessionID: $sessionID, participantID: $participantID, vote: $vote) {
+    id
+    name
+    votingStarted
+    reviewingIssue {
+      url
+      title
+      description
+    }
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type SetVoteMutationFn = ApolloReactCommon.MutationFunction<SetVoteMutation, SetVoteMutationVariables>;
+
+/**
+ * __useSetVoteMutation__
+ *
+ * To run a mutation, you first call `useSetVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setVoteMutation, { data, loading, error }] = useSetVoteMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *      participantID: // value for 'participantID'
+ *      vote: // value for 'vote'
+ *   },
+ * });
+ */
+export function useSetVoteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetVoteMutation, SetVoteMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetVoteMutation, SetVoteMutationVariables>(SetVoteDocument, baseOptions);
+      }
+export type SetVoteMutationHookResult = ReturnType<typeof useSetVoteMutation>;
+export type SetVoteMutationResult = ApolloReactCommon.MutationResult<SetVoteMutation>;
+export type SetVoteMutationOptions = ApolloReactCommon.BaseMutationOptions<SetVoteMutation, SetVoteMutationVariables>;
+export const StartVotingDocument = gql`
+    mutation StartVoting($sessionID: ID!) {
+  startVoting(sessionID: $sessionID) {
+    id
+    name
+    votingStarted
+    reviewingIssue {
+      url
+      title
+      description
+    }
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type StartVotingMutationFn = ApolloReactCommon.MutationFunction<StartVotingMutation, StartVotingMutationVariables>;
+
+/**
+ * __useStartVotingMutation__
+ *
+ * To run a mutation, you first call `useStartVotingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartVotingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startVotingMutation, { data, loading, error }] = useStartVotingMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *   },
+ * });
+ */
+export function useStartVotingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StartVotingMutation, StartVotingMutationVariables>) {
+        return ApolloReactHooks.useMutation<StartVotingMutation, StartVotingMutationVariables>(StartVotingDocument, baseOptions);
+      }
+export type StartVotingMutationHookResult = ReturnType<typeof useStartVotingMutation>;
+export type StartVotingMutationResult = ApolloReactCommon.MutationResult<StartVotingMutation>;
+export type StartVotingMutationOptions = ApolloReactCommon.BaseMutationOptions<StartVotingMutation, StartVotingMutationVariables>;
+export const StopVotingDocument = gql`
+    mutation StopVoting($sessionID: ID!) {
+  stopVoting(sessionID: $sessionID) {
+    id
+    name
+    votingStarted
+    reviewingIssue {
+      url
+      title
+      description
+    }
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type StopVotingMutationFn = ApolloReactCommon.MutationFunction<StopVotingMutation, StopVotingMutationVariables>;
+
+/**
+ * __useStopVotingMutation__
+ *
+ * To run a mutation, you first call `useStopVotingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStopVotingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [stopVotingMutation, { data, loading, error }] = useStopVotingMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *   },
+ * });
+ */
+export function useStopVotingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StopVotingMutation, StopVotingMutationVariables>) {
+        return ApolloReactHooks.useMutation<StopVotingMutation, StopVotingMutationVariables>(StopVotingDocument, baseOptions);
+      }
+export type StopVotingMutationHookResult = ReturnType<typeof useStopVotingMutation>;
+export type StopVotingMutationResult = ApolloReactCommon.MutationResult<StopVotingMutation>;
+export type StopVotingMutationOptions = ApolloReactCommon.BaseMutationOptions<StopVotingMutation, StopVotingMutationVariables>;
 export const GetSessionDocument = gql`
     query getSession($sessionID: ID!, $participantID: ID!) {
   session(sessionID: $sessionID) {
@@ -396,6 +617,7 @@ export const SessionStateChangedDocument = gql`
   sessionStateChanged(id: $sessionID) {
     id
     name
+    votingStarted
     reviewingIssue {
       url
       title

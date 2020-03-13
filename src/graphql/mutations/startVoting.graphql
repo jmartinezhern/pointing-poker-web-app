@@ -1,5 +1,5 @@
-mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
-    joinSession(sessionID: $sessionID, participant: $participant) {
+mutation StartVoting($sessionID: ID!) {
+    startVoting(sessionID: $sessionID) {
         id
         name
         votingStarted
