@@ -1,6 +1,17 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { makeStyles, Button, Grid, Typography, TextField, createStyles } from '@material-ui/core'
+import {
+  makeStyles,
+  Button,
+  Grid,
+  Typography,
+  TextField,
+  createStyles,
+  useMediaQuery,
+  useTheme,
+  Fade,
+  CircularProgress,
+} from '@material-ui/core'
 
 import { useDoesSessionExistLazyQuery } from '~generated/graphql'
 
@@ -22,6 +33,10 @@ export const StarterScreen: FunctionComponent = () => {
 
   const classes = useStyles()
 
+  const theme = useTheme()
+
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+
   useEffect(() => {
     if (called && !loading && !error) {
       history.push(`/session/${sessionID}`)
@@ -36,7 +51,7 @@ export const StarterScreen: FunctionComponent = () => {
           Pointing Poker
         </Typography>
       </Grid>
-      <Grid container justify="center" direction="row" alignItems="center" spacing={4}>
+      <Grid container justify="center" direction={matches ? 'column' : 'row'} alignItems="center" spacing={4}>
         <Grid item>
           <Button
             className={classes.actionButton}
@@ -76,6 +91,11 @@ export const StarterScreen: FunctionComponent = () => {
               >
                 Find Session
               </Button>
+            </Grid>
+            <Grid item>
+              <Fade in={loading}>
+                <CircularProgress />
+              </Fade>
             </Grid>
           </Grid>
         </Grid>

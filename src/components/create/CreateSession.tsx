@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FunctionComponent, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Grid, Slider, TextField, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Fade, Grid, Slider, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -9,7 +9,7 @@ import { useCreateSessionMutation } from '~generated/graphql'
 const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
 const useStyles = makeStyles(() => {
-  return { nameFields: { minWidth: '15vw', marginTop: '1em', marginBottom: '2em' } }
+  return { nameFields: { minWidth: '10vw', marginTop: '1em', marginBottom: '2em' } }
 })
 
 export const CreateSession: FunctionComponent = () => {
@@ -20,7 +20,7 @@ export const CreateSession: FunctionComponent = () => {
   const [sessionName, setSessionName] = useState<string>('')
   const [moderatorName, setModeratorName] = useState<string>('')
 
-  const [createSessionMutation] = useCreateSessionMutation()
+  const [createSessionMutation, { loading }] = useCreateSessionMutation()
 
   const getSessionNameProblem = (): string | null => {
     if (sessionName.length == 0) {
@@ -115,6 +115,8 @@ export const CreateSession: FunctionComponent = () => {
         <Typography id="range-slider" gutterBottom>
           Pointing Range
         </Typography>
+      </Grid>
+      <Grid item>
         <Slider
           value={pointingRange}
           onChange={pointingRangeChanged}
@@ -129,12 +131,17 @@ export const CreateSession: FunctionComponent = () => {
       <Grid item>
         <Button
           color="primary"
-          style={{ marginTop: '2em', minWidth: '14em' }}
+          style={{ marginTop: '4em', minWidth: '14em' }}
           onClick={createButtonClicked}
           disabled={!canCreate()}
         >
           Create
         </Button>
+      </Grid>
+      <Grid item>
+        <Fade in={loading}>
+          <CircularProgress style={{ marginTop: '2em' }} />
+        </Fade>
       </Grid>
     </Grid>
   )
