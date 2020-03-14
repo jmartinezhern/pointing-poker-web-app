@@ -1,0 +1,21 @@
+mutation CloseSession($sessionID: ID!) {
+    closeSession(sessionID: $sessionID) {
+        id
+        name
+        votingStarted
+        reviewingIssue {
+            url
+            title
+            description
+        }
+        participants {
+            id
+            name
+            isModerator
+            vote {
+                points
+                abstained
+            }
+        }
+    }
+}

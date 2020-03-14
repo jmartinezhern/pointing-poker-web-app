@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'
+import { useParams } from 'react-router-dom'
 import { Container, Grid, Typography } from '@material-ui/core'
 
 import { useGetSessionLazyQuery, useSessionStateChangedSubscription } from '~generated/graphql'
@@ -7,20 +8,12 @@ import { ReviewingIssue } from '~components/session/ReviewingIssue'
 import { JoinSession } from '~components/session/JoinSession'
 import { VotingOptions } from '~components/session/VotingOptions'
 import { VotingControl } from '~components/session/VotingControl'
-
-//const sessionID = '659d86ae-ec0c-4170-9866-b436a981ce29'
-//const participantID = 'ae90dca2-2704-47fe-925f-e2106f273816'
-
-interface Props {
-  session: {
-    sessionID: string
-    participantID?: string
-  }
-}
-
-const sessionID = window.location.pathname.slice(1)
+import { LeaveSession } from '~components/session/LeaveSession'
+import { CloseSession } from '~components/session/CloseSession'
 
 export const Session: FunctionComponent = () => {
+  const { sessionID } = useParams<{ sessionID: string }>()
+
   const [loadSession, { called, data, loading: loadingSession }] = useGetSessionLazyQuery()
 
   const { data: subData, loading } = useSessionStateChangedSubscription({
@@ -87,7 +80,11 @@ export const Session: FunctionComponent = () => {
     const currentParticipant = data.participant
 
     return (
-      <Grid container justify="center" spacing={6} style={{ marginTop: '50px' }}>
+      <Grid container justify="center" spacing={6}>
+        <Grid container item justify="flex-end">
+          {!currentParticipant.isModerator && <LeaveSession sessionID={sessionID} participantID={participantID} />}
+          {currentParticipant.isModerator && <CloseSession sessionID={sessionID} />}
+        </Grid>
         <Grid item>
           <Typography variant="h2">{session.name}</Typography>
         </Grid>

@@ -159,6 +159,30 @@ export type VoteDescription = {
   abstained: Scalars['Boolean'];
 };
 
+export type CloseSessionMutationVariables = {
+  sessionID: Scalars['ID'];
+};
+
+
+export type CloseSessionMutation = (
+  { __typename?: 'Mutation' }
+  & { closeSession: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
+      { __typename?: 'Participant' }
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
+    )> }
+  )> }
+);
+
 export type CreateSessionMutationVariables = {
   name: Scalars['String'];
   pointingMin: Scalars['Int'];
@@ -184,6 +208,31 @@ export type JoinSessionMutationVariables = {
 export type JoinSessionMutation = (
   { __typename?: 'Mutation' }
   & { joinSession: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name' | 'votingStarted'>
+    & { reviewingIssue: Maybe<(
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
+    )>, participants: Array<(
+      { __typename?: 'Participant' }
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
+    )> }
+  )> }
+);
+
+export type LeaveSessionMutationVariables = {
+  sessionID: Scalars['ID'];
+  participantID: Scalars['ID'];
+};
+
+
+export type LeaveSessionMutation = (
+  { __typename?: 'Mutation' }
+  & { leaveSession: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'votingStarted'>
     & { reviewingIssue: Maybe<(
@@ -327,6 +376,54 @@ export type SessionStateChangedSubscription = (
 );
 
 
+export const CloseSessionDocument = gql`
+    mutation CloseSession($sessionID: ID!) {
+  closeSession(sessionID: $sessionID) {
+    id
+    name
+    votingStarted
+    reviewingIssue {
+      url
+      title
+      description
+    }
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type CloseSessionMutationFn = ApolloReactCommon.MutationFunction<CloseSessionMutation, CloseSessionMutationVariables>;
+
+/**
+ * __useCloseSessionMutation__
+ *
+ * To run a mutation, you first call `useCloseSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCloseSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [closeSessionMutation, { data, loading, error }] = useCloseSessionMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *   },
+ * });
+ */
+export function useCloseSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CloseSessionMutation, CloseSessionMutationVariables>) {
+        return ApolloReactHooks.useMutation<CloseSessionMutation, CloseSessionMutationVariables>(CloseSessionDocument, baseOptions);
+      }
+export type CloseSessionMutationHookResult = ReturnType<typeof useCloseSessionMutation>;
+export type CloseSessionMutationResult = ApolloReactCommon.MutationResult<CloseSessionMutation>;
+export type CloseSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<CloseSessionMutation, CloseSessionMutationVariables>;
 export const CreateSessionDocument = gql`
     mutation CreateSession($name: String!, $pointingMin: Int!, $pointingMax: Int!, $moderator: ParticipantDescription!) {
   createSession(sessionDescription: {name: $name, pointingMin: $pointingMin, pointingMax: $pointingMax}, moderator: $moderator) {
@@ -411,6 +508,55 @@ export function useJoinSessionMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type JoinSessionMutationHookResult = ReturnType<typeof useJoinSessionMutation>;
 export type JoinSessionMutationResult = ApolloReactCommon.MutationResult<JoinSessionMutation>;
 export type JoinSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinSessionMutation, JoinSessionMutationVariables>;
+export const LeaveSessionDocument = gql`
+    mutation LeaveSession($sessionID: ID!, $participantID: ID!) {
+  leaveSession(sessionID: $sessionID, participantID: $participantID) {
+    id
+    name
+    votingStarted
+    reviewingIssue {
+      url
+      title
+      description
+    }
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type LeaveSessionMutationFn = ApolloReactCommon.MutationFunction<LeaveSessionMutation, LeaveSessionMutationVariables>;
+
+/**
+ * __useLeaveSessionMutation__
+ *
+ * To run a mutation, you first call `useLeaveSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leaveSessionMutation, { data, loading, error }] = useLeaveSessionMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *      participantID: // value for 'participantID'
+ *   },
+ * });
+ */
+export function useLeaveSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LeaveSessionMutation, LeaveSessionMutationVariables>) {
+        return ApolloReactHooks.useMutation<LeaveSessionMutation, LeaveSessionMutationVariables>(LeaveSessionDocument, baseOptions);
+      }
+export type LeaveSessionMutationHookResult = ReturnType<typeof useLeaveSessionMutation>;
+export type LeaveSessionMutationResult = ApolloReactCommon.MutationResult<LeaveSessionMutation>;
+export type LeaveSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<LeaveSessionMutation, LeaveSessionMutationVariables>;
 export const SetVoteDocument = gql`
     mutation SetVote($sessionID: ID!, $participantID: ID!, $vote: VoteDescription!) {
   setVote(sessionID: $sessionID, participantID: $participantID, vote: $vote) {

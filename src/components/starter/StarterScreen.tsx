@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'
+import { useHistory } from 'react-router-dom'
 import { makeStyles, Button, Grid, Typography, Container, Card, TextField, CardContent } from '@material-ui/core'
 
 const useStyles = makeStyles(() => {
@@ -6,6 +7,8 @@ const useStyles = makeStyles(() => {
 })
 
 export const StarterScreen: FunctionComponent = () => {
+  const history = useHistory()
+
   const classes = useStyles()
 
   return (
@@ -17,8 +20,13 @@ export const StarterScreen: FunctionComponent = () => {
         <Grid container justify="center" spacing={4}>
           <Grid item>
             <Card>
-              <Button color="primary">
-                <Typography>Create a session</Typography>
+              <Button
+                color="primary"
+                onClick={() => {
+                  history.push('/create')
+                }}
+              >
+                Create a session
               </Button>
             </Card>
           </Grid>

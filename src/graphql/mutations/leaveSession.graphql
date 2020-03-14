@@ -1,0 +1,21 @@
+mutation LeaveSession($sessionID: ID!, $participantID: ID!) {
+    leaveSession(sessionID: $sessionID, participantID: $participantID) {
+        id
+        name
+        votingStarted
+        reviewingIssue {
+            url
+            title
+            description
+        }
+        participants {
+            id
+            name
+            isModerator
+            vote {
+                points
+                abstained
+            }
+        }
+    }
+}

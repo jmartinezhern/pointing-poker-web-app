@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Button, Grid, Slider, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,10 +9,11 @@ import { useCreateSessionMutation } from '~generated/graphql'
 const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
 const useStyles = makeStyles(() => {
-  return { nameFields: { minWidth: '12vw', marginTop: '1em', marginBottom: '2em' } }
+  return { nameFields: { minWidth: '15vw', marginTop: '1em', marginBottom: '2em' } }
 })
 
 export const CreateSession: FunctionComponent = () => {
+  const history = useHistory()
   const classes = useStyles()
   const [pointingRange, setPointingRange] = useState<number[]>([0, fibSeq.length - 1])
 
@@ -55,34 +57,30 @@ export const CreateSession: FunctionComponent = () => {
   }
 
   const createButtonClicked = async (): Promise<void> => {
+    const moderatorID = uuidv4()
+
     const { data } = await createSessionMutation({
       variables: {
         pointingMax: fibSeq[pointingRange[1]],
         pointingMin: fibSeq[pointingRange[0]],
         name: sessionName,
         moderator: {
-          id: '',
+          id: moderatorID,
           name: moderatorName,
         },
       },
     })
 
-    const sessionData = {
-      participantID: uuidv4(),
-    }
-
     if (data?.createSession) {
-      localStorage.setItem(data.createSession.id, sessionData.participantID)
+      const sessionData = {
+        participantID: moderatorID,
+      }
+
+      localStorage.setItem(data.createSession.id, JSON.stringify(sessionData))
+
+      history.push(`/session/${data.createSession.id}`)
     }
   }
-
-  useEffect(() => {
-    const sessionID = data?.createSession?.id
-
-    if (sessionID) {
-      window.location.replace(`http://localhost:1234/${sessionID}`)
-    }
-  }, [data])
 
   return (
     <Grid container direction="column" justify="center" alignItems="center" spacing={0} style={{ minHeight: '100vh' }}>

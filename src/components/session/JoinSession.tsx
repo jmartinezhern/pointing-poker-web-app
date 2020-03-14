@@ -39,8 +39,6 @@ export const JoinSession: FunctionComponent = () => {
       },
     })
 
-    console.log(data)
-
     localStorage.setItem(sessionID, JSON.stringify(sessionData))
   }
 
