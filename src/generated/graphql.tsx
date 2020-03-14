@@ -323,6 +323,19 @@ export type StopVotingMutation = (
   )> }
 );
 
+export type DoesSessionExistQueryVariables = {
+  sessionID: Scalars['ID'];
+};
+
+
+export type DoesSessionExistQuery = (
+  { __typename?: 'Query' }
+  & { session: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id'>
+  )> }
+);
+
 export type GetSessionQueryVariables = {
   sessionID: Scalars['ID'];
   participantID: Scalars['ID'];
@@ -703,6 +716,39 @@ export function useStopVotingMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type StopVotingMutationHookResult = ReturnType<typeof useStopVotingMutation>;
 export type StopVotingMutationResult = ApolloReactCommon.MutationResult<StopVotingMutation>;
 export type StopVotingMutationOptions = ApolloReactCommon.BaseMutationOptions<StopVotingMutation, StopVotingMutationVariables>;
+export const DoesSessionExistDocument = gql`
+    query DoesSessionExist($sessionID: ID!) {
+  session(sessionID: $sessionID) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useDoesSessionExistQuery__
+ *
+ * To run a query within a React component, call `useDoesSessionExistQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDoesSessionExistQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDoesSessionExistQuery({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *   },
+ * });
+ */
+export function useDoesSessionExistQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DoesSessionExistQuery, DoesSessionExistQueryVariables>) {
+        return ApolloReactHooks.useQuery<DoesSessionExistQuery, DoesSessionExistQueryVariables>(DoesSessionExistDocument, baseOptions);
+      }
+export function useDoesSessionExistLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DoesSessionExistQuery, DoesSessionExistQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<DoesSessionExistQuery, DoesSessionExistQueryVariables>(DoesSessionExistDocument, baseOptions);
+        }
+export type DoesSessionExistQueryHookResult = ReturnType<typeof useDoesSessionExistQuery>;
+export type DoesSessionExistLazyQueryHookResult = ReturnType<typeof useDoesSessionExistLazyQuery>;
+export type DoesSessionExistQueryResult = ApolloReactCommon.QueryResult<DoesSessionExistQuery, DoesSessionExistQueryVariables>;
 export const GetSessionDocument = gql`
     query getSession($sessionID: ID!, $participantID: ID!) {
   session(sessionID: $sessionID) {

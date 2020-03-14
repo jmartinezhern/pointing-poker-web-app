@@ -1,0 +1,5 @@
+query DoesSessionExist($sessionID: ID!) {
+    session(sessionID: $sessionID) {
+        id
+    }
+}

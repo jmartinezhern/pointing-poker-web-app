@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
+import React, { ChangeEvent, FunctionComponent, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Grid, Slider, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,7 +20,7 @@ export const CreateSession: FunctionComponent = () => {
   const [sessionName, setSessionName] = useState<string>('')
   const [moderatorName, setModeratorName] = useState<string>('')
 
-  const [createSessionMutation, { data }] = useCreateSessionMutation()
+  const [createSessionMutation] = useCreateSessionMutation()
 
   const getSessionNameProblem = (): string | null => {
     if (sessionName.length == 0) {

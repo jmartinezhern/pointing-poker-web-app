@@ -5,7 +5,7 @@ import { CssBaseline, createMuiTheme } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 
 import { StarterScreen } from '~components/starter/StarterScreen'
-import { Session } from '~components/session/Session'
+import { SessionProvider } from '~components/session/SessionProvider.tsx'
 import { GraphQLProvider } from '~graphql/GraphQLProvider'
 import { CreateSession } from '~components/create/CreateSession'
 
@@ -23,7 +23,7 @@ const Root = (
           <Route path="/session">
             <Switch>
               <Route path="/session/:sessionID">
-                <Session />
+                <SessionProvider />
               </Route>
             </Switch>
           </Route>

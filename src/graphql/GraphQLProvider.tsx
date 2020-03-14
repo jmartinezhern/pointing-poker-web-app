@@ -16,7 +16,7 @@ const region = 'us-east-2'
 const wssEndpoint = `wss://${apiID}.appsync-realtime-api.${region}.amazonaws.com/graphql`
 const host = `${apiID}.appsync-api.${region}.amazonaws.com`
 const httpEndpoint = `https://${host}/graphql`
-const apiKey = 'da2-jdwemepvzbeo5okdsfokyqdmtq'
+const apiKey = 'da2-sr3ysrz22nhhzdzvmvt5wv24hm'
 
 const clientFactory = (): ApolloClient<{}> => {
   const httpLink = createHttpLink({

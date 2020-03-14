@@ -29,7 +29,7 @@ export const JoinSession: FunctionComponent = () => {
 
     sessionData.participantID = uuidv4()
 
-    const { data } = await joinSessionMutation({
+    await joinSessionMutation({
       variables: {
         sessionID,
         participant: {
@@ -52,6 +52,7 @@ export const JoinSession: FunctionComponent = () => {
             setName(value)
           }}
           value={name}
+          style={{ marginBottom: '14px' }}
         />
       </Grid>
       <Grid item>
