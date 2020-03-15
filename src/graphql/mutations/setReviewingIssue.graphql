@@ -1,5 +1,5 @@
-mutation StartVoting($sessionID: ID!) {
-    startVoting(sessionID: $sessionID) {
+mutation SetIssue($sessionID: ID!, $description: IssueDescription!) {
+    setReviewingIssue(sessionID: $sessionID, issue: $description) {
         id
         name
         pointingMax

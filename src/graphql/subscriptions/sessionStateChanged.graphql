@@ -2,10 +2,13 @@ subscription SessionStateChanged($sessionID: ID!) {
     sessionStateChanged(id: $sessionID) {
         id
         name
+        pointingMax
+        pointingMin
         votingStarted
+        expiration
         reviewingIssue {
-            url
             title
+            url
             description
         }
         participants {

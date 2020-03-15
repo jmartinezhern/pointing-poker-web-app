@@ -1,6 +1,17 @@
-import React, { ChangeEvent, FunctionComponent, useState } from 'react'
+import React, { ChangeEvent, CSSProperties, FunctionComponent, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, CircularProgress, Fade, Grid, Slider, TextField, Typography } from '@material-ui/core'
+import {
+  Button,
+  CircularProgress,
+  Fade,
+  Grid,
+  Slider,
+  StyledProps,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -9,18 +20,28 @@ import { useCreateSessionMutation } from '~generated/graphql'
 const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
 const useStyles = makeStyles(() => {
-  return { nameFields: { minWidth: '10vw', marginTop: '1em', marginBottom: '2em' } }
+  return { nameFields: { marginTop: '1em', marginBottom: '2em' } }
 })
 
 export const CreateSession: FunctionComponent = () => {
   const history = useHistory()
+
   const classes = useStyles()
+
+  const theme = useTheme()
+
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+
   const [pointingRange, setPointingRange] = useState<number[]>([0, fibSeq.length - 1])
 
   const [sessionName, setSessionName] = useState<string>('')
   const [moderatorName, setModeratorName] = useState<string>('')
 
   const [createSessionMutation, { loading }] = useCreateSessionMutation()
+
+  const responsiveWidth = (): CSSProperties => {
+    return matches ? { width: '75vw' } : { width: '300px' }
+  }
 
   const getSessionNameProblem = (): string | null => {
     if (sessionName.length == 0) {
@@ -98,6 +119,7 @@ export const CreateSession: FunctionComponent = () => {
           label="What is your name?"
           value={moderatorName}
           onChange={moderatorNameChanged}
+          style={responsiveWidth()}
         />
       </Grid>
       <Grid item>
@@ -109,6 +131,7 @@ export const CreateSession: FunctionComponent = () => {
           label="What is the session's name?"
           value={sessionName}
           onChange={sessionNameChanged}
+          style={responsiveWidth()}
         />
       </Grid>
       <Grid item>
@@ -125,7 +148,7 @@ export const CreateSession: FunctionComponent = () => {
           scale={x => fibSeq[x]}
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
-          style={{ minWidth: '10vw' }}
+          style={responsiveWidth()}
         />
       </Grid>
       <Grid item>

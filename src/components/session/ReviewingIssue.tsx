@@ -1,48 +1,31 @@
 import React, { FunctionComponent } from 'react'
-import { Grid, TextField, Typography } from '@material-ui/core'
+import { Card, CardContent, Grid, Link, Typography } from '@material-ui/core'
 
 import { ReviewingIssue as ReviewingIssueType } from '~generated/graphql'
 
 interface ReviewingIssueProps {
-  reviewingIssue: ReviewingIssueType | null
-  fieldsEnabled: boolean
+  reviewingIssue: ReviewingIssueType
 }
 
-export const ReviewingIssue: FunctionComponent<ReviewingIssueProps> = props => {
+export const ReviewingIssue: FunctionComponent<ReviewingIssueProps> = ({ reviewingIssue }) => {
   return (
-    <Grid container item direction="column" spacing={4} style={{ maxWidth: '20vw' }}>
-      <Grid item>
-        <Typography variant="h5">Reviewing Issue</Typography>
-      </Grid>
-      <Grid item>
-        <TextField
-          id="issue-title"
-          label="Title"
-          disabled={!props.fieldsEnabled}
-          value={props.reviewingIssue?.title ?? ''}
-          fullWidth={true}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="issue-url"
-          label="URL"
-          disabled={!props.fieldsEnabled}
-          value={props.reviewingIssue?.url ?? ''}
-          fullWidth={true}
-        />
-      </Grid>
-      <Grid item>
-        <TextField
-          id="issue-description"
-          label="Description"
-          disabled={!props.fieldsEnabled}
-          value={props.reviewingIssue?.description ?? ''}
-          multiline={true}
-          rows={3}
-          fullWidth={true}
-        />
-      </Grid>
+    <Grid container item direction="column" style={{ maxWidth: '300px' }} spacing={4}>
+      <Card>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>
+            Reviewing Issue
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            {reviewingIssue.title ?? ''}
+          </Typography>
+          <Typography gutterBottom>{reviewingIssue.description ?? ''}</Typography>
+          {reviewingIssue.url && (
+            <Link style={{ marginTop: '22px' }} href={reviewingIssue.url} target="_blank" rel="noreferrer">
+              Link
+            </Link>
+          )}
+        </CardContent>
+      </Card>
     </Grid>
   )
 }

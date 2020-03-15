@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from 'react'
-import { Button, createStyles, Grid, TextField } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import { Button, CircularProgress, createStyles, Fade, Grid, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -14,14 +15,18 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-const sessionID = '659d86ae-ec0c-4170-9866-b436a981ce29'
+interface Props {
+  sessionID: string
+}
 
-export const JoinSession: FunctionComponent = () => {
+export const JoinSession: FunctionComponent<Props> = ({ sessionID }) => {
+  const history = useHistory()
+
   const classes = useStyles()
 
   const [name, setName] = useState('')
 
-  const [joinSessionMutation, { error }] = useJoinSessionMutation()
+  const [joinSessionMutation, { loading, error }] = useJoinSessionMutation()
 
   const joinSessionButtonClicked = async (): Promise<void> => {
     const sessionLocalStore = localStorage.getItem(sessionID)
@@ -40,6 +45,8 @@ export const JoinSession: FunctionComponent = () => {
     })
 
     localStorage.setItem(sessionID, JSON.stringify(sessionData))
+
+    history.push(`/session/${sessionID}`)
   }
 
   return (
@@ -59,6 +66,11 @@ export const JoinSession: FunctionComponent = () => {
         <Button className={classes.joinButton} onClick={joinSessionButtonClicked}>
           Join Session
         </Button>
+      </Grid>
+      <Grid item>
+        <Fade in={loading}>
+          <CircularProgress />
+        </Fade>
       </Grid>
     </Grid>
   )

@@ -108,7 +108,7 @@ export type QueryParticipantArgs = {
 
 export type ReviewingIssue = {
    __typename?: 'ReviewingIssue';
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
@@ -119,7 +119,7 @@ export type Session = {
   createdAt?: Maybe<Scalars['String']>;
   participants: Array<Participant>;
   name: Scalars['String'];
-  reviewingIssue?: Maybe<ReviewingIssue>;
+  reviewingIssue: ReviewingIssue;
   pointingMin: Scalars['Int'];
   pointingMax: Scalars['Int'];
   expiration: Scalars['Int'];
@@ -168,11 +168,11 @@ export type CloseSessionMutation = (
   { __typename?: 'Mutation' }
   & { closeSession: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -209,11 +209,11 @@ export type JoinSessionMutation = (
   { __typename?: 'Mutation' }
   & { joinSession: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -234,11 +234,36 @@ export type LeaveSessionMutation = (
   { __typename?: 'Mutation' }
   & { leaveSession: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
+      { __typename?: 'Participant' }
+      & Pick<Participant, 'id' | 'name' | 'isModerator'>
+      & { vote: Maybe<(
+        { __typename?: 'Vote' }
+        & Pick<Vote, 'points' | 'abstained'>
+      )> }
+    )> }
+  )> }
+);
+
+export type SetIssueMutationVariables = {
+  sessionID: Scalars['ID'];
+  description: IssueDescription;
+};
+
+
+export type SetIssueMutation = (
+  { __typename?: 'Mutation' }
+  & { setReviewingIssue: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
+      { __typename?: 'ReviewingIssue' }
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -260,11 +285,11 @@ export type SetVoteMutation = (
   { __typename?: 'Mutation' }
   & { setVote: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -284,11 +309,11 @@ export type StartVotingMutation = (
   { __typename?: 'Mutation' }
   & { startVoting: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -308,11 +333,11 @@ export type StopVotingMutation = (
   { __typename?: 'Mutation' }
   & { stopVoting: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -346,11 +371,11 @@ export type GetSessionQuery = (
   { __typename?: 'Query' }
   & { session: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
-    )>, participants: Array<(
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -360,7 +385,7 @@ export type GetSessionQuery = (
     )> }
   )>, participant: Maybe<(
     { __typename?: 'Participant' }
-    & Pick<Participant, 'isModerator'>
+    & Pick<Participant, 'id' | 'isModerator'>
   )> }
 );
 
@@ -373,11 +398,11 @@ export type SessionStateChangedSubscription = (
   { __typename?: 'Subscription' }
   & { sessionStateChanged: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'votingStarted'>
-    & { reviewingIssue: Maybe<(
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
+    & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
-      & Pick<ReviewingIssue, 'url' | 'title' | 'description'>
-    )>, participants: Array<(
+      & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
+    ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
       & { vote: Maybe<(
@@ -394,10 +419,13 @@ export const CloseSessionDocument = gql`
   closeSession(sessionID: $sessionID) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {
@@ -477,10 +505,13 @@ export const JoinSessionDocument = gql`
   joinSession(sessionID: $sessionID, participant: $participant) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {
@@ -526,10 +557,13 @@ export const LeaveSessionDocument = gql`
   leaveSession(sessionID: $sessionID, participantID: $participantID) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {
@@ -570,15 +604,70 @@ export function useLeaveSessionMutation(baseOptions?: ApolloReactHooks.MutationH
 export type LeaveSessionMutationHookResult = ReturnType<typeof useLeaveSessionMutation>;
 export type LeaveSessionMutationResult = ApolloReactCommon.MutationResult<LeaveSessionMutation>;
 export type LeaveSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<LeaveSessionMutation, LeaveSessionMutationVariables>;
+export const SetIssueDocument = gql`
+    mutation SetIssue($sessionID: ID!, $description: IssueDescription!) {
+  setReviewingIssue(sessionID: $sessionID, issue: $description) {
+    id
+    name
+    pointingMax
+    pointingMin
+    votingStarted
+    expiration
+    reviewingIssue {
+      title
+      url
+      description
+    }
+    participants {
+      id
+      name
+      isModerator
+      vote {
+        points
+        abstained
+      }
+    }
+  }
+}
+    `;
+export type SetIssueMutationFn = ApolloReactCommon.MutationFunction<SetIssueMutation, SetIssueMutationVariables>;
+
+/**
+ * __useSetIssueMutation__
+ *
+ * To run a mutation, you first call `useSetIssueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetIssueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setIssueMutation, { data, loading, error }] = useSetIssueMutation({
+ *   variables: {
+ *      sessionID: // value for 'sessionID'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useSetIssueMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetIssueMutation, SetIssueMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetIssueMutation, SetIssueMutationVariables>(SetIssueDocument, baseOptions);
+      }
+export type SetIssueMutationHookResult = ReturnType<typeof useSetIssueMutation>;
+export type SetIssueMutationResult = ApolloReactCommon.MutationResult<SetIssueMutation>;
+export type SetIssueMutationOptions = ApolloReactCommon.BaseMutationOptions<SetIssueMutation, SetIssueMutationVariables>;
 export const SetVoteDocument = gql`
     mutation SetVote($sessionID: ID!, $participantID: ID!, $vote: VoteDescription!) {
   setVote(sessionID: $sessionID, participantID: $participantID, vote: $vote) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {
@@ -625,10 +714,13 @@ export const StartVotingDocument = gql`
   startVoting(sessionID: $sessionID) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {
@@ -673,10 +765,13 @@ export const StopVotingDocument = gql`
   stopVoting(sessionID: $sessionID) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {
@@ -757,6 +852,7 @@ export const GetSessionDocument = gql`
     pointingMax
     pointingMin
     votingStarted
+    expiration
     reviewingIssue {
       title
       url
@@ -773,6 +869,7 @@ export const GetSessionDocument = gql`
     }
   }
   participant(id: $participantID) {
+    id
     isModerator
   }
 }
@@ -809,10 +906,13 @@ export const SessionStateChangedDocument = gql`
   sessionStateChanged(id: $sessionID) {
     id
     name
+    pointingMax
+    pointingMin
     votingStarted
+    expiration
     reviewingIssue {
-      url
       title
+      url
       description
     }
     participants {

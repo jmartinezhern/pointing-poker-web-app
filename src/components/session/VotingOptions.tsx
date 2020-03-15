@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { Button, Grid, Typography } from '@material-ui/core'
+import { Button, Grid, useMediaQuery, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useSetVoteMutation } from '~generated/graphql'
@@ -16,61 +16,66 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   sessionID: string
   participantID: string
+  pointRange: {
+    max: number
+    min: number
+  }
 }
 
-export const VotingOptions: FunctionComponent<Props> = ({ sessionID, participantID }) => {
+export const VotingOptions: FunctionComponent<Props> = ({ sessionID, participantID, pointRange }) => {
   const classes = useStyles()
 
   const [setVoteMutation] = useSetVoteMutation()
 
+  const theme = useTheme()
+
+  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+
   return (
-    <Grid container item justify="center" spacing={2}>
-      <Grid item>
-        <Typography variant="h6" style={{ color: 'green' }}>
-          Voting Started!
-        </Typography>
-      </Grid>
-      <Grid container item spacing={4} justify="center">
-        {fibSeq.map(num => (
-          <Grid item key={num}>
-            <Button
-              className={classes.voteButton}
-              onClick={async () => {
-                await setVoteMutation({
-                  variables: {
-                    sessionID,
-                    participantID,
-                    vote: {
-                      points: num,
-                      abstained: false,
+    <Grid container item direction="column" spacing={2} style={matches ? { maxWidth: '240px' } : { maxWidth: '300px' }}>
+      <Grid container item spacing={2}>
+        {fibSeq
+          .filter(num => num >= pointRange.min && num <= pointRange.max)
+          .map(num => (
+            <Grid item key={num}>
+              <Button
+                className={classes.voteButton}
+                onClick={async () => {
+                  await setVoteMutation({
+                    variables: {
+                      sessionID,
+                      participantID,
+                      vote: {
+                        points: num,
+                        abstained: false,
+                      },
                     },
-                  },
-                })
-              }}
-            >
-              {num}
-            </Button>
-          </Grid>
-        ))}
-        <Grid item>
-          <Button
-            className={classes.voteButton}
-            onClick={async () => {
-              await setVoteMutation({
-                variables: {
-                  sessionID,
-                  participantID,
-                  vote: {
-                    points: 0,
-                    abstained: true,
-                  },
+                  })
+                }}
+              >
+                {num}
+              </Button>
+            </Grid>
+          ))}
+      </Grid>
+      <Grid item>
+        <Button
+          className={classes.voteButton}
+          onClick={async () => {
+            await setVoteMutation({
+              variables: {
+                sessionID,
+                participantID,
+                vote: {
+                  points: 0,
+                  abstained: true,
                 },
-              })
-            }}
-          >
-            Abstain
-          </Button>
-        </Grid>
+              },
+            })
+          }}
+        >
+          Abstain
+        </Button>
       </Grid>
     </Grid>
   )

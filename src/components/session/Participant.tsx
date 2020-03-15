@@ -12,6 +12,7 @@ const useStyles = makeStyles(() => {
   return {
     participantCard: {
       flexDirection: 'row',
+      width: '300px',
     },
   }
 })

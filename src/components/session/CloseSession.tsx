@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
-import { Button, Grid } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import { Button, CircularProgress, Fade, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useCloseSessionMutation } from '~generated/graphql'
@@ -16,28 +17,37 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const CloseSession: FunctionComponent<Props> = ({ sessionID }) => {
+  const history = useHistory()
+
   const classes = useStyles()
 
-  const [closeSessionMutation] = useCloseSessionMutation()
+  const [closeSessionMutation, { loading }] = useCloseSessionMutation()
 
   return (
-    <Grid>
-      <Button
-        className={classes.closeSessionButton}
-        onClick={async () => {
-          await closeSessionMutation({
-            variables: {
-              sessionID,
-            },
-          })
+    <Grid container item justify="flex-end">
+      <Grid item>
+        <Fade in={loading}>
+          <CircularProgress />
+        </Fade>
+      </Grid>
+      <Grid item>
+        <Button
+          className={classes.closeSessionButton}
+          onClick={async () => {
+            await closeSessionMutation({
+              variables: {
+                sessionID,
+              },
+            })
 
-          localStorage.removeItem(sessionID)
+            localStorage.removeItem(sessionID)
 
-          window.location.replace('http://localhost:1234')
-        }}
-      >
-        Close Session
-      </Button>
+            history.push('/')
+          }}
+        >
+          Close Session
+        </Button>
+      </Grid>
     </Grid>
   )
 }

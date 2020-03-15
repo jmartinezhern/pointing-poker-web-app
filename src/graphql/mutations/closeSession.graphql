@@ -2,10 +2,13 @@ mutation CloseSession($sessionID: ID!) {
     closeSession(sessionID: $sessionID) {
         id
         name
+        pointingMax
+        pointingMin
         votingStarted
+        expiration
         reviewingIssue {
-            url
             title
+            url
             description
         }
         participants {

@@ -2,10 +2,13 @@ mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
     joinSession(sessionID: $sessionID, participant: $participant) {
         id
         name
+        pointingMax
+        pointingMin
         votingStarted
+        expiration
         reviewingIssue {
-            url
             title
+            url
             description
         }
         participants {

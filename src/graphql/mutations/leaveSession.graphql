@@ -2,10 +2,13 @@ mutation LeaveSession($sessionID: ID!, $participantID: ID!) {
     leaveSession(sessionID: $sessionID, participantID: $participantID) {
         id
         name
+        pointingMax
+        pointingMin
         votingStarted
+        expiration
         reviewingIssue {
-            url
             title
+            url
             description
         }
         participants {

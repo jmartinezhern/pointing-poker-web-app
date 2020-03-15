@@ -16,7 +16,7 @@ interface Props {
   votingStarted: boolean
 }
 
-export const VotingControl: FunctionComponent<Props> = ({ sessionID, votingStarted }) => {
+export const SessionControls: FunctionComponent<Props> = ({ sessionID, votingStarted }) => {
   const classes = useStyles()
 
   const [startVoting] = useStartVotingMutation({
@@ -32,7 +32,7 @@ export const VotingControl: FunctionComponent<Props> = ({ sessionID, votingStart
   })
 
   return (
-    <Grid container item justify="center" spacing={2}>
+    <Grid container item spacing={2}>
       <Grid item>
         <Button
           className={classes.controlButton}
@@ -42,6 +42,9 @@ export const VotingControl: FunctionComponent<Props> = ({ sessionID, votingStart
         >
           {votingStarted ? 'Stop Voting' : 'Start Voting'}
         </Button>
+      </Grid>
+      <Grid item>
+        <Button className={classes.controlButton}>Edit Reviewing Issue</Button>
       </Grid>
     </Grid>
   )

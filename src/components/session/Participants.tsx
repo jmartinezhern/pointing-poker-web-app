@@ -1,14 +1,23 @@
 import React, { FunctionComponent } from 'react'
-import { Grid } from '@material-ui/core'
+import { List, ListItem } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
 import { Participant as ParticipantType } from '~generated/graphql'
 import { Participant } from '~components/session/Participant'
+
+const useStyles = makeStyles(() => ({
+  participantBox: {
+    width: '300px',
+  },
+}))
 
 interface ParticipantsProps {
   participants: ParticipantType[]
 }
 
 export const Participants: FunctionComponent<ParticipantsProps> = ({ participants }) => {
+  const classes = useStyles()
+
   participants = participants.sort((a, b) => {
     if (a.isModerator) {
       return -1
@@ -26,12 +35,12 @@ export const Participants: FunctionComponent<ParticipantsProps> = ({ participant
   })
 
   return (
-    <Grid container item direction="column" spacing={2} style={{ maxWidth: '15vw' }}>
+    <List>
       {participants.map(participant => (
-        <Grid key={participant.id} item>
+        <ListItem className={classes.participantBox} key={participant.id}>
           <Participant participant={participant} />
-        </Grid>
+        </ListItem>
       ))}
-    </Grid>
+    </List>
   )
 }

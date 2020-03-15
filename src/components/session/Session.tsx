@@ -1,82 +1,62 @@
 import React, { FunctionComponent } from 'react'
-import { Container, Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 
 import { LeaveSession } from '~components/session/LeaveSession'
 import { CloseSession } from '~components/session/CloseSession'
 import { VotingOptions } from '~components/session/VotingOptions'
-import { VotingControl } from '~components/session/VotingControl'
+import { SessionControls } from '~/components/session/SessionControls'
 import { Participants } from '~components/session/Participants'
 import { ReviewingIssue } from '~components/session/ReviewingIssue'
-import { useGetSessionQuery, useSessionStateChangedSubscription } from '~generated/graphql'
+import { Session as SessionType, useSessionStateChangedSubscription } from '~generated/graphql'
 
 interface Props {
-  participantID: string
-  sessionID: string
+  session: SessionType
+  participant: { id: string; isModerator: boolean }
 }
 
-export const Session: FunctionComponent<Props> = ({ participantID, sessionID }) => {
-  const { data, loading: loadingSession } = useGetSessionQuery({
+export const Session: FunctionComponent<Props> = ({ session, participant }) => {
+  const { data, loading } = useSessionStateChangedSubscription({
     variables: {
-      sessionID,
-      participantID,
+      sessionID: session.id,
     },
   })
 
-  const { data: subData, loading } = useSessionStateChangedSubscription({
-    variables: {
-      sessionID,
-    },
-  })
-
-  if (loadingSession) {
-    return (
-      <Typography variant="h5" align="center" style={{ marginTop: '50vh' }}>
-        Loading...
-      </Typography>
-    )
-  }
-
-  if (!data?.session || !data?.participant) {
-    return (
-      <Container>
-        <Typography>Something went wrong</Typography>
-      </Container>
-    )
-  }
-
-  let session
-  if (loading) {
-    session = data.session
-  } else {
-    session = subData?.sessionStateChanged
-  }
-
-  if (!session) {
-    return <Typography>Session is undefined</Typography>
+  if (!loading) {
+    session = data?.sessionStateChanged as SessionType
   }
 
   const participants = session.participants
 
-  const currentParticipant = data.participant
-
   return (
-    <Grid container justify="center" spacing={6}>
-      <Grid container item justify="flex-end">
-        {!currentParticipant.isModerator && <LeaveSession sessionID={sessionID} participantID={participantID} />}
-        {currentParticipant.isModerator && <CloseSession sessionID={sessionID} />}
+    <Grid container justify="center" alignItems="center" spacing={6}>
+      <Grid container item>
+        {!participant.isModerator && <LeaveSession sessionID={session.id} participantID={participant.id} />}
+        {participant.isModerator && <CloseSession sessionID={session.id} />}
       </Grid>
       <Grid item>
         <Typography variant="h2">{session.name}</Typography>
       </Grid>
-      <Grid container item justify="center" direction="row" spacing={4}>
-        {session.votingStarted && !currentParticipant.isModerator && (
-          <VotingOptions sessionID={sessionID} participantID={participantID} />
-        )}
-        {currentParticipant.isModerator && (
-          <VotingControl sessionID={sessionID} votingStarted={session.votingStarted} />
-        )}
-        <Participants participants={participants} />
-        <ReviewingIssue reviewingIssue={session.reviewingIssue} fieldsEnabled={currentParticipant.isModerator} />
+      <Grid container justify="center" direction="row" item spacing={2}>
+        <Grid item>
+          <Grid item>
+            {participant.isModerator && (
+              <SessionControls sessionID={session.id} votingStarted={session.votingStarted} />
+            )}
+            {session.votingStarted && !participant.isModerator && (
+              <VotingOptions
+                sessionID={session.id}
+                participantID={participant.id}
+                pointRange={{ max: session.pointingMax, min: session.pointingMin }}
+              />
+            )}
+          </Grid>
+          <Grid item style={{ marginTop: '20px' }}>
+            <ReviewingIssue reviewingIssue={session.reviewingIssue} fieldsEnabled={participant.isModerator} />
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Participants participants={participants} />
+        </Grid>
       </Grid>
     </Grid>
   )

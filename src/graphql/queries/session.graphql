@@ -5,6 +5,7 @@ query getSession($sessionID: ID!, $participantID: ID!) {
         pointingMax
         pointingMin
         votingStarted
+        expiration
         reviewingIssue {
             title
             url
@@ -22,6 +23,7 @@ query getSession($sessionID: ID!, $participantID: ID!) {
     }
 
     participant(id: $participantID) {
+        id
         isModerator
     }
 }

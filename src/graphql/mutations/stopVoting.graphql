@@ -2,10 +2,13 @@ mutation StopVoting($sessionID: ID!) {
     stopVoting(sessionID: $sessionID) {
         id
         name
+        pointingMax
+        pointingMin
         votingStarted
+        expiration
         reviewingIssue {
-            url
             title
+            url
             description
         }
         participants {
