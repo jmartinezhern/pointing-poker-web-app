@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, CircularProgress, createStyles, Fade, Grid, TextField } from '@material-ui/core'
+import { Button, CircularProgress, createStyles, Fade, Grid, Snackbar, TextField } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -72,6 +73,9 @@ export const JoinSession: FunctionComponent<Props> = ({ sessionID }) => {
           <CircularProgress />
         </Fade>
       </Grid>
+      <Snackbar open={error !== undefined} autoHideDuration={10000}>
+        <Alert severity="error">{error?.message ?? 'Something went wrong'}</Alert>
+      </Snackbar>
     </Grid>
   )
 }

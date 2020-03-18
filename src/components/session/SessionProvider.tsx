@@ -56,8 +56,6 @@ export const SessionProvider: FunctionComponent = () => {
     return <Session session={data.session} participant={data.participant} />
   }
 
-  console.log(data?.session, data?.participant)
-
   return (
     <Typography variant="h2" align="center">
       Something went wrong

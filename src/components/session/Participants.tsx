@@ -35,9 +35,9 @@ export const Participants: FunctionComponent<ParticipantsProps> = ({ participant
   })
 
   return (
-    <List>
+    <List disablePadding={true}>
       {participants.map(participant => (
-        <ListItem className={classes.participantBox} key={participant.id}>
+        <ListItem className={classes.participantBox} key={participant.id} dense={true}>
           <Participant participant={participant} />
         </ListItem>
       ))}

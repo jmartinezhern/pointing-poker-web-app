@@ -6,13 +6,14 @@ import {
   Fade,
   Grid,
   Slider,
-  StyledProps,
+  Snackbar,
   TextField,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { Alert } from '@material-ui/lab'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useCreateSessionMutation } from '~generated/graphql'
@@ -37,7 +38,7 @@ export const CreateSession: FunctionComponent = () => {
   const [sessionName, setSessionName] = useState<string>('')
   const [moderatorName, setModeratorName] = useState<string>('')
 
-  const [createSessionMutation, { loading }] = useCreateSessionMutation()
+  const [createSessionMutation, { error, loading }] = useCreateSessionMutation()
 
   const responsiveWidth = (): CSSProperties => {
     return matches ? { width: '75vw' } : { width: '300px' }
@@ -166,6 +167,9 @@ export const CreateSession: FunctionComponent = () => {
           <CircularProgress style={{ marginTop: '2em' }} />
         </Fade>
       </Grid>
+      <Snackbar open={error !== undefined}>
+        <Alert severity="error">{error?.message ?? 'Something went wrong'}</Alert>
+      </Snackbar>
     </Grid>
   )
 }

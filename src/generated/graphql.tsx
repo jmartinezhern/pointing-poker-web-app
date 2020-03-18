@@ -166,7 +166,7 @@ export type CloseSessionMutationVariables = {
 
 export type CloseSessionMutation = (
   { __typename?: 'Mutation' }
-  & { closeSession: Maybe<(
+  & { closeSession?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -175,7 +175,7 @@ export type CloseSessionMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -193,7 +193,7 @@ export type CreateSessionMutationVariables = {
 
 export type CreateSessionMutation = (
   { __typename?: 'Mutation' }
-  & { createSession: Maybe<(
+  & { createSession?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id'>
   )> }
@@ -207,7 +207,7 @@ export type JoinSessionMutationVariables = {
 
 export type JoinSessionMutation = (
   { __typename?: 'Mutation' }
-  & { joinSession: Maybe<(
+  & { joinSession?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -216,7 +216,7 @@ export type JoinSessionMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -232,7 +232,7 @@ export type LeaveSessionMutationVariables = {
 
 export type LeaveSessionMutation = (
   { __typename?: 'Mutation' }
-  & { leaveSession: Maybe<(
+  & { leaveSession?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -241,7 +241,7 @@ export type LeaveSessionMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -257,7 +257,7 @@ export type SetIssueMutationVariables = {
 
 export type SetIssueMutation = (
   { __typename?: 'Mutation' }
-  & { setReviewingIssue: Maybe<(
+  & { setReviewingIssue?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -266,7 +266,7 @@ export type SetIssueMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -283,7 +283,7 @@ export type SetVoteMutationVariables = {
 
 export type SetVoteMutation = (
   { __typename?: 'Mutation' }
-  & { setVote: Maybe<(
+  & { setVote?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -292,7 +292,7 @@ export type SetVoteMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -307,7 +307,7 @@ export type StartVotingMutationVariables = {
 
 export type StartVotingMutation = (
   { __typename?: 'Mutation' }
-  & { startVoting: Maybe<(
+  & { startVoting?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -316,7 +316,7 @@ export type StartVotingMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -331,7 +331,7 @@ export type StopVotingMutationVariables = {
 
 export type StopVotingMutation = (
   { __typename?: 'Mutation' }
-  & { stopVoting: Maybe<(
+  & { stopVoting?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -340,7 +340,7 @@ export type StopVotingMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
@@ -355,7 +355,7 @@ export type DoesSessionExistQueryVariables = {
 
 export type DoesSessionExistQuery = (
   { __typename?: 'Query' }
-  & { session: Maybe<(
+  & { session?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id'>
   )> }
@@ -369,7 +369,7 @@ export type GetSessionQueryVariables = {
 
 export type GetSessionQuery = (
   { __typename?: 'Query' }
-  & { session: Maybe<(
+  & { session?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -378,12 +378,12 @@ export type GetSessionQuery = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }
     )> }
-  )>, participant: Maybe<(
+  )>, participant?: Maybe<(
     { __typename?: 'Participant' }
     & Pick<Participant, 'id' | 'isModerator'>
   )> }
@@ -396,7 +396,7 @@ export type SessionStateChangedSubscriptionVariables = {
 
 export type SessionStateChangedSubscription = (
   { __typename?: 'Subscription' }
-  & { sessionStateChanged: Maybe<(
+  & { sessionStateChanged?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiration'>
     & { reviewingIssue: (
@@ -405,7 +405,7 @@ export type SessionStateChangedSubscription = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote: Maybe<(
+      & { vote?: Maybe<(
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
       )> }

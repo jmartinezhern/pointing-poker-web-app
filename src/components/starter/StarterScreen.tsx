@@ -11,7 +11,9 @@ import {
   useTheme,
   Fade,
   CircularProgress,
+  Snackbar,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 
 import { useDoesSessionExistLazyQuery } from '~generated/graphql'
 
@@ -99,6 +101,11 @@ export const StarterScreen: FunctionComponent = () => {
             </Grid>
           </Grid>
         </Grid>
+      </Grid>
+      <Grid item>
+        <Snackbar open={error !== undefined} autoHideDuration={10000}>
+          <Alert severity="error">{error?.message ?? 'Something went wrong'}</Alert>
+        </Snackbar>
       </Grid>
     </Grid>
   )

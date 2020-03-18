@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react'
-import { Button, Grid, useMediaQuery, useTheme } from '@material-ui/core'
+import React, { FunctionComponent, useState } from 'react'
+import { Button, CircularProgress, Fade, Grid, MenuItem, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useSetVoteMutation } from '~generated/graphql'
@@ -25,38 +25,46 @@ interface Props {
 export const VotingOptions: FunctionComponent<Props> = ({ sessionID, participantID, pointRange }) => {
   const classes = useStyles()
 
-  const [setVoteMutation] = useSetVoteMutation()
+  const selections = fibSeq.filter(num => num >= pointRange.min && num <= pointRange.max)
 
-  const theme = useTheme()
+  const [selection, setSelection] = useState(selections[0])
 
-  const matches = useMediaQuery(theme.breakpoints.down('xs'))
+  const [setVoteMutation, { loading }] = useSetVoteMutation()
 
   return (
-    <Grid container item direction="column" spacing={2} style={matches ? { maxWidth: '240px' } : { maxWidth: '300px' }}>
-      <Grid container item spacing={2}>
-        {fibSeq
-          .filter(num => num >= pointRange.min && num <= pointRange.max)
-          .map(num => (
-            <Grid item key={num}>
-              <Button
-                className={classes.voteButton}
-                onClick={async () => {
-                  await setVoteMutation({
-                    variables: {
-                      sessionID,
-                      participantID,
-                      vote: {
-                        points: num,
-                        abstained: false,
-                      },
-                    },
-                  })
-                }}
-              >
-                {num}
-              </Button>
-            </Grid>
+    <Grid container item direction="row" spacing={2}>
+      <Grid item>
+        <Select
+          value={selection}
+          onChange={event => {
+            setSelection(event.target.value as number)
+          }}
+        >
+          {fibSeq.map(num => (
+            <MenuItem key={num} value={num}>
+              {num}
+            </MenuItem>
           ))}
+        </Select>
+      </Grid>
+      <Grid item>
+        <Button
+          className={classes.voteButton}
+          onClick={async () => {
+            await setVoteMutation({
+              variables: {
+                sessionID,
+                participantID,
+                vote: {
+                  points: selection,
+                  abstained: false,
+                },
+              },
+            })
+          }}
+        >
+          Vote
+        </Button>
       </Grid>
       <Grid item>
         <Button
@@ -76,6 +84,11 @@ export const VotingOptions: FunctionComponent<Props> = ({ sessionID, participant
         >
           Abstain
         </Button>
+      </Grid>
+      <Grid item>
+        <Fade in={loading}>
+          <CircularProgress />
+        </Fade>
       </Grid>
     </Grid>
   )

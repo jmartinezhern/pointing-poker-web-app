@@ -28,7 +28,7 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
   const participants = session.participants
 
   return (
-    <Grid container justify="center" alignItems="center" spacing={6}>
+    <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
       <Grid container item>
         {!participant.isModerator && <LeaveSession sessionID={session.id} participantID={participant.id} />}
         {participant.isModerator && <CloseSession sessionID={session.id} />}
@@ -36,23 +36,19 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
       <Grid item>
         <Typography variant="h2">{session.name}</Typography>
       </Grid>
-      <Grid container justify="center" direction="row" item spacing={2}>
+      <Grid item>
+        {participant.isModerator && <SessionControls sessionID={session.id} votingStarted={session.votingStarted} />}
+        {session.votingStarted && !participant.isModerator && (
+          <VotingOptions
+            sessionID={session.id}
+            participantID={participant.id}
+            pointRange={{ max: session.pointingMax, min: session.pointingMin }}
+          />
+        )}
+      </Grid>
+      <Grid container item justify="center" direction="row" spacing={2}>
         <Grid item>
-          <Grid item>
-            {participant.isModerator && (
-              <SessionControls sessionID={session.id} votingStarted={session.votingStarted} />
-            )}
-            {session.votingStarted && !participant.isModerator && (
-              <VotingOptions
-                sessionID={session.id}
-                participantID={participant.id}
-                pointRange={{ max: session.pointingMax, min: session.pointingMin }}
-              />
-            )}
-          </Grid>
-          <Grid item style={{ marginTop: '20px' }}>
-            <ReviewingIssue reviewingIssue={session.reviewingIssue} fieldsEnabled={participant.isModerator} />
-          </Grid>
+          <ReviewingIssue reviewingIssue={session.reviewingIssue} />
         </Grid>
         <Grid item>
           <Participants participants={participants} />
