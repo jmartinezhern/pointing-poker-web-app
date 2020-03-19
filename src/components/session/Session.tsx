@@ -1,10 +1,8 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, lazy } from 'react'
 import { Grid, Typography } from '@material-ui/core'
 
 import { LeaveSession } from '~components/session/LeaveSession'
 import { CloseSession } from '~components/session/CloseSession'
-import { VotingOptions } from '~components/session/VotingOptions'
-import { SessionControls } from '~/components/session/SessionControls'
 import { Participants } from '~components/session/Participants'
 import { ReviewingIssue } from '~components/session/ReviewingIssue'
 import { Session as SessionType, useSessionStateChangedSubscription } from '~generated/graphql'
@@ -25,6 +23,18 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
     session = data?.sessionStateChanged as SessionType
   }
 
+  const Results = lazy(async () => {
+    return { default: (await import('~components/session/Results')).Results }
+  })
+
+  const SessionControls = lazy(async () => {
+    return { default: (await import('~components/session/SessionControls')).SessionControls }
+  })
+
+  const VotingOptions = lazy(async () => {
+    return { default: (await import('~components/session/VotingOptions')).VotingOptions }
+  })
+
   const participants = session.participants
 
   return (
@@ -35,6 +45,15 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
       </Grid>
       <Grid item>
         <Typography variant="h2">{session.name}</Typography>
+      </Grid>
+      <Grid item>
+        {!session.votingStarted && (
+          <Results
+            votes={session.participants
+              .filter(participant => !participant.isModerator)
+              .map(participant => participant.vote.points)}
+          />
+        )}
       </Grid>
       <Grid item>
         {participant.isModerator && <SessionControls sessionID={session.id} votingStarted={session.votingStarted} />}
@@ -51,7 +70,11 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
           <ReviewingIssue reviewingIssue={session.reviewingIssue} />
         </Grid>
         <Grid item>
-          <Participants participants={participants} />
+          <Participants
+            participants={participants}
+            votingStarted={session.votingStarted}
+            participantID={participant.id}
+          />
         </Grid>
       </Grid>
     </Grid>

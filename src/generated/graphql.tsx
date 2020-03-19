@@ -82,7 +82,7 @@ export type Participant = {
   name: Scalars['String'];
   isModerator: Scalars['Boolean'];
   currentSession?: Maybe<Session>;
-  vote?: Maybe<Vote>;
+  vote: Vote;
 };
 
 export type ParticipantDescription = {
@@ -150,7 +150,7 @@ export type SubscriptionSessionStateChangedArgs = {
 
 export type Vote = {
    __typename?: 'Vote';
-  points?: Maybe<Scalars['Int']>;
+  points: Scalars['Int'];
   abstained: Scalars['Boolean'];
 };
 
@@ -175,10 +175,10 @@ export type CloseSessionMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -216,10 +216,10 @@ export type JoinSessionMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -241,10 +241,10 @@ export type LeaveSessionMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -266,10 +266,10 @@ export type SetIssueMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -292,10 +292,10 @@ export type SetVoteMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -316,10 +316,10 @@ export type StartVotingMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -340,10 +340,10 @@ export type StopVotingMutation = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );
@@ -378,10 +378,10 @@ export type GetSessionQuery = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )>, participant?: Maybe<(
     { __typename?: 'Participant' }
@@ -405,10 +405,10 @@ export type SessionStateChangedSubscription = (
     ), participants: Array<(
       { __typename?: 'Participant' }
       & Pick<Participant, 'id' | 'name' | 'isModerator'>
-      & { vote?: Maybe<(
+      & { vote: (
         { __typename?: 'Vote' }
         & Pick<Vote, 'points' | 'abstained'>
-      )> }
+      ) }
     )> }
   )> }
 );

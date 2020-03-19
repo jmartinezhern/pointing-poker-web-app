@@ -32,7 +32,7 @@ export const VotingOptions: FunctionComponent<Props> = ({ sessionID, participant
   const [setVoteMutation, { loading }] = useSetVoteMutation()
 
   return (
-    <Grid container item direction="row" spacing={2}>
+    <Grid container item direction="row" spacing={2} style={{ width: '300px' }}>
       <Grid item>
         <Select
           value={selection}

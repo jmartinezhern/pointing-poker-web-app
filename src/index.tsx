@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { CssBaseline, createMuiTheme } from '@material-ui/core'
@@ -23,7 +23,9 @@ const Root = (
           <Route path="/session">
             <Switch>
               <Route path="/session/:sessionID">
-                <SessionProvider />
+                <Suspense fallback={<div>Loading... </div>}>
+                  <SessionProvider />
+                </Suspense>
               </Route>
             </Switch>
           </Route>

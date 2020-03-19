@@ -12,10 +12,12 @@ const useStyles = makeStyles(() => ({
 }))
 
 interface ParticipantsProps {
+  votingStarted: boolean
+  participantID: string
   participants: ParticipantType[]
 }
 
-export const Participants: FunctionComponent<ParticipantsProps> = ({ participants }) => {
+export const Participants: FunctionComponent<ParticipantsProps> = ({ votingStarted, participantID, participants }) => {
   const classes = useStyles()
 
   participants = participants.sort((a, b) => {
@@ -38,7 +40,10 @@ export const Participants: FunctionComponent<ParticipantsProps> = ({ participant
     <List disablePadding={true}>
       {participants.map(participant => (
         <ListItem className={classes.participantBox} key={participant.id} dense={true}>
-          <Participant participant={participant} />
+          <Participant
+            participant={participant}
+            showVotes={!participant.isModerator && (!votingStarted || participantID === participant.id)}
+          />
         </ListItem>
       ))}
     </List>
