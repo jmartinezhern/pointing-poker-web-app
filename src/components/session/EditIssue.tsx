@@ -2,13 +2,16 @@ import React, { FunctionComponent, useState } from 'react'
 import { Button, Card, CardContent, CircularProgress, Fade, Grid, TextField } from '@material-ui/core'
 
 import { useSetIssueMutation } from '~generated/graphql'
+import { useSession } from '~components/session/SessionProvider'
 
 interface Props {
-  sessionID: string
-  onCloseModal?: () => void
+  onConfirm?: () => void
+  onCancel?: () => void
 }
 
-export const EditIssue: FunctionComponent<Props> = ({ sessionID, onCloseModal }) => {
+export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => {
+  const { id: sessionID } = useSession()
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [url, setURL] = useState('')
@@ -45,7 +48,7 @@ export const EditIssue: FunctionComponent<Props> = ({ sessionID, onCloseModal })
           </Grid>
           <Grid container item justify="center" spacing={2}>
             <Grid item>
-              <Button onClick={onCloseModal}>Cancel</Button>
+              <Button onClick={onCancel}>Cancel</Button>
               <Button
                 onClick={async () => {
                   await setIssue({
@@ -59,8 +62,8 @@ export const EditIssue: FunctionComponent<Props> = ({ sessionID, onCloseModal })
                     },
                   })
 
-                  if (onCloseModal) {
-                    onCloseModal()
+                  if (onConfirm) {
+                    onConfirm()
                   }
                 }}
               >

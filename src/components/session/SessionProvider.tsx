@@ -1,49 +1,26 @@
-import React, { FunctionComponent } from 'react'
-import { useParams } from 'react-router-dom'
-import { Grid, Typography } from '@material-ui/core'
+import React, { createContext, FunctionComponent, useContext } from 'react'
+import { Typography } from '@material-ui/core'
 
-import { JoinSession } from '~components/session/JoinSession'
-import { Session } from '~components/session/Session'
-import { useGetSessionLazyQuery } from '~generated/graphql'
+import { useGetSessionQuery, Session } from '~generated/graphql'
 
-export const SessionProvider: FunctionComponent = () => {
-  const [getSessionQuery, { called, data, loading }] = useGetSessionLazyQuery()
+const SessionContext = createContext<Session | null>(null)
 
-  const { sessionID } = useParams<{ sessionID: string }>()
+function useSession(): Session {
+  const session = useContext(SessionContext)
+  if (!session) {
+    throw new Error('useSession must be used down-tree from a SessionProvider component')
+  }
+  return session
+}
 
-  let participantID: string | undefined
+const SessionProvider: FunctionComponent<{ sessionID: string }> = props => {
+  const { sessionID } = props
 
-  const sessionStore = localStorage.getItem(sessionID)
-
-  if (sessionStore) {
-    participantID = JSON.parse(sessionStore).participantID
+  if (!sessionID) {
+    throw new Error('SessionProvider must be used as a routed-component with a sessionID path param')
   }
 
-  if (!participantID) {
-    return (
-      <Grid
-        container
-        item
-        direction="column"
-        justify="center"
-        alignItems="center"
-        spacing={0}
-        style={{ minHeight: '100vh' }}
-      >
-        <JoinSession sessionID={sessionID} />
-      </Grid>
-    )
-  }
-
-  if (!called) {
-    getSessionQuery({
-      variables: {
-        sessionID,
-        participantID,
-      },
-    })
-  }
-
+  const { data, error, loading } = useGetSessionQuery({ variables: { sessionID } })
   if (loading) {
     return (
       <Typography variant="h5" align="center" style={{ marginTop: '50vh' }}>
@@ -52,13 +29,19 @@ export const SessionProvider: FunctionComponent = () => {
     )
   }
 
-  if (data?.session && data?.participant) {
-    return <Session session={data.session} participant={data.participant} />
+  if (!data || error) {
+    return (
+      <Typography variant="h5" align="center" style={{ marginTop: '50vh' }} color="error">
+        {error?.message ?? 'Something went wrong...'}
+      </Typography>
+    )
   }
 
-  return (
-    <Typography variant="h2" align="center">
-      Something went wrong
-    </Typography>
-  )
+  if (!data.session) {
+    return <>invalid session: {sessionID}</>
+  }
+
+  return <SessionContext.Provider value={data.session}>{props.children}</SessionContext.Provider>
 }
+
+export { useSession, SessionProvider }

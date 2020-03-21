@@ -3,6 +3,8 @@ import { Button, CircularProgress, Fade, Grid, MenuItem, Select } from '@materia
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useSetVoteMutation } from '~generated/graphql'
+import { useSession } from '~components/session/SessionProvider'
+import { useParticipant } from '~components/session/ParticipantProvider'
 
 const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
@@ -14,15 +16,17 @@ const useStyles = makeStyles(theme => ({
 }))
 
 interface Props {
-  sessionID: string
-  participantID: string
   pointRange: {
     max: number
     min: number
   }
 }
 
-export const VotingOptions: FunctionComponent<Props> = ({ sessionID, participantID, pointRange }) => {
+export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
+  const { id: sessionID } = useSession()
+
+  const { id: participantID } = useParticipant()
+
   const classes = useStyles()
 
   const selections = fibSeq.filter(num => num >= pointRange.min && num <= pointRange.max)

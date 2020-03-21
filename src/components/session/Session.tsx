@@ -1,47 +1,52 @@
-import React, { FunctionComponent, lazy } from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import React, { FunctionComponent, useState } from 'react'
+import { Grid, Modal, Typography } from '@material-ui/core'
 
 import { LeaveSession } from '~components/session/LeaveSession'
 import { CloseSession } from '~components/session/CloseSession'
 import { Participants } from '~components/session/Participants'
 import { ReviewingIssue } from '~components/session/ReviewingIssue'
+import { Results } from '~components/session/Results'
+import { useSession } from '~components/session/SessionProvider'
+import { useParticipant } from '~components/session/ParticipantProvider'
 import { Session as SessionType, useSessionStateChangedSubscription } from '~generated/graphql'
+import { EditIssue } from '~components/session/EditIssue'
+import { SessionControls } from '~components/session/SessionControls'
+import { VotingOptions } from '~components/session/VotingOptions'
 
-interface Props {
-  session: SessionType
-  participant: { id: string; isModerator: boolean }
-}
+export const Session: FunctionComponent = () => {
+  let session = useSession()
 
-export const Session: FunctionComponent<Props> = ({ session, participant }) => {
+  const participant = useParticipant()
+
   const { data, loading } = useSessionStateChangedSubscription({
     variables: {
       sessionID: session.id,
     },
   })
 
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const closeModal = (): void => {
+    setModalOpen(false)
+  }
+
   if (!loading) {
     session = data?.sessionStateChanged as SessionType
   }
 
-  const Results = lazy(async () => {
-    return { default: (await import('~components/session/Results')).Results }
-  })
-
-  const SessionControls = lazy(async () => {
-    return { default: (await import('~components/session/SessionControls')).SessionControls }
-  })
-
-  const VotingOptions = lazy(async () => {
-    return { default: (await import('~components/session/VotingOptions')).VotingOptions }
-  })
-
-  const participants = session.participants
-
   return (
     <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
+      <Modal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false)
+        }}
+      >
+        <EditIssue onCancel={closeModal} onConfirm={closeModal} />
+      </Modal>
       <Grid container item>
-        {!participant.isModerator && <LeaveSession sessionID={session.id} participantID={participant.id} />}
-        {participant.isModerator && <CloseSession sessionID={session.id} />}
+        {!participant.isModerator && <LeaveSession />}
+        {participant.isModerator && <CloseSession />}
       </Grid>
       <Grid item>
         <Typography variant="h2">{session.name}</Typography>
@@ -56,13 +61,16 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
         )}
       </Grid>
       <Grid item>
-        {participant.isModerator && <SessionControls sessionID={session.id} votingStarted={session.votingStarted} />}
-        {session.votingStarted && !participant.isModerator && (
-          <VotingOptions
-            sessionID={session.id}
-            participantID={participant.id}
-            pointRange={{ max: session.pointingMax, min: session.pointingMin }}
+        {participant.isModerator && (
+          <SessionControls
+            votingStarted={session.votingStarted}
+            onEditIssueClicked={() => {
+              setModalOpen(true)
+            }}
           />
+        )}
+        {session.votingStarted && !participant.isModerator && (
+          <VotingOptions pointRange={{ max: session.pointingMax, min: session.pointingMin }} />
         )}
       </Grid>
       <Grid container item justify="center" direction="row" spacing={2}>
@@ -70,11 +78,7 @@ export const Session: FunctionComponent<Props> = ({ session, participant }) => {
           <ReviewingIssue reviewingIssue={session.reviewingIssue} />
         </Grid>
         <Grid item>
-          <Participants
-            participants={participants}
-            votingStarted={session.votingStarted}
-            participantID={participant.id}
-          />
+          <Participants participants={session.participants} votingStarted={session.votingStarted} />
         </Grid>
       </Grid>
     </Grid>

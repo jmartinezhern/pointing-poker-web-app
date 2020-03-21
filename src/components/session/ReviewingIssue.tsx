@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { Card, CardContent, Grid, Link, Typography } from '@material-ui/core'
+import { Card, CardContent, Link, Typography } from '@material-ui/core'
 
 import { ReviewingIssue as ReviewingIssueType } from '~generated/graphql'
 

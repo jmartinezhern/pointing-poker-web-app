@@ -1,9 +1,10 @@
-import React, { FunctionComponent, lazy, useState } from 'react'
-import { Button, Grid, Modal } from '@material-ui/core'
+import React, { FunctionComponent } from 'react'
+import { Button, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { StopVotingButton } from '~components/session/StopVotingButton'
 import { StartVotingButton } from '~components/session/StartVotingButton'
+import { useSession } from '~components/session/SessionProvider'
 
 const useStyles = makeStyles(theme => ({
   controlButton: {
@@ -17,18 +18,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 interface Props {
-  sessionID: string
   votingStarted: boolean
+  onEditIssueClicked?: () => void
 }
 
-export const SessionControls: FunctionComponent<Props> = ({ sessionID, votingStarted }) => {
+export const SessionControls: FunctionComponent<Props> = ({ votingStarted, onEditIssueClicked }) => {
+  const { id: sessionID } = useSession()
+
   const classes = useStyles()
-
-  const [open, setOpen] = useState(false)
-
-  const EditIssueComponent = lazy(async () => {
-    return { default: (await import('~components/session/EditIssue')).EditIssue }
-  })
 
   return (
     <Grid container item spacing={2}>
@@ -39,25 +36,14 @@ export const SessionControls: FunctionComponent<Props> = ({ sessionID, votingSta
         <Button
           className={classes.controlButton}
           onClick={() => {
-            setOpen(true)
+            if (onEditIssueClicked) {
+              onEditIssueClicked()
+            }
           }}
         >
           Edit Reviewing Issue
         </Button>
       </Grid>
-      <Modal
-        open={open}
-        onClose={() => {
-          setOpen(false)
-        }}
-      >
-        <EditIssueComponent
-          sessionID={sessionID}
-          onCloseModal={() => {
-            setOpen(false)
-          }}
-        />
-      </Modal>
     </Grid>
   )
 }

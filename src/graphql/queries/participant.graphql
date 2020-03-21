@@ -1,0 +1,6 @@
+query Participant($participantID: ID!) {
+    participant(id: $participantID) {
+        id
+        isModerator
+    }
+}

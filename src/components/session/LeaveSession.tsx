@@ -4,11 +4,8 @@ import { Button, CircularProgress, Fade, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useLeaveSessionMutation } from '~generated/graphql'
-
-interface Props {
-  sessionID: string
-  participantID: string
-}
+import { useSession } from '~components/session/SessionProvider'
+import { useParticipant } from '~components/session/ParticipantProvider'
 
 const useStyles = makeStyles(theme => ({
   leaveSessionButton: {
@@ -17,7 +14,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const LeaveSession: FunctionComponent<Props> = ({ sessionID, participantID }) => {
+export const LeaveSession: FunctionComponent = () => {
+  const { id: sessionID } = useSession()
+  const { id: participantID } = useParticipant()
+
   const history = useHistory()
 
   const classes = useStyles()

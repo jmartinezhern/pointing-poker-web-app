@@ -4,6 +4,7 @@ import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useStartVotingMutation } from '~generated/graphql'
+import { useSession } from '~components/session/SessionProvider'
 
 const useStyles = makeStyles(theme => ({
   controlButton: {
@@ -16,11 +17,9 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-interface Props {
-  sessionID: string
-}
+export const StartVotingButton: FunctionComponent = () => {
+  const { id: sessionID } = useSession()
 
-export const StartVotingButton: FunctionComponent<Props> = ({ sessionID }) => {
   const classes = useStyles()
 
   const [startVoting, { loading, error }] = useStartVotingMutation({

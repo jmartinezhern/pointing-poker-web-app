@@ -361,9 +361,21 @@ export type DoesSessionExistQuery = (
   )> }
 );
 
+export type ParticipantQueryVariables = {
+  participantID: Scalars['ID'];
+};
+
+
+export type ParticipantQuery = (
+  { __typename?: 'Query' }
+  & { participant?: Maybe<(
+    { __typename?: 'Participant' }
+    & Pick<Participant, 'id' | 'isModerator'>
+  )> }
+);
+
 export type GetSessionQueryVariables = {
   sessionID: Scalars['ID'];
-  participantID: Scalars['ID'];
 };
 
 
@@ -383,9 +395,6 @@ export type GetSessionQuery = (
         & Pick<Vote, 'points' | 'abstained'>
       ) }
     )> }
-  )>, participant?: Maybe<(
-    { __typename?: 'Participant' }
-    & Pick<Participant, 'id' | 'isModerator'>
   )> }
 );
 
@@ -844,8 +853,42 @@ export function useDoesSessionExistLazyQuery(baseOptions?: ApolloReactHooks.Lazy
 export type DoesSessionExistQueryHookResult = ReturnType<typeof useDoesSessionExistQuery>;
 export type DoesSessionExistLazyQueryHookResult = ReturnType<typeof useDoesSessionExistLazyQuery>;
 export type DoesSessionExistQueryResult = ApolloReactCommon.QueryResult<DoesSessionExistQuery, DoesSessionExistQueryVariables>;
+export const ParticipantDocument = gql`
+    query Participant($participantID: ID!) {
+  participant(id: $participantID) {
+    id
+    isModerator
+  }
+}
+    `;
+
+/**
+ * __useParticipantQuery__
+ *
+ * To run a query within a React component, call `useParticipantQuery` and pass it any options that fit your needs.
+ * When your component renders, `useParticipantQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useParticipantQuery({
+ *   variables: {
+ *      participantID: // value for 'participantID'
+ *   },
+ * });
+ */
+export function useParticipantQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ParticipantQuery, ParticipantQueryVariables>) {
+        return ApolloReactHooks.useQuery<ParticipantQuery, ParticipantQueryVariables>(ParticipantDocument, baseOptions);
+      }
+export function useParticipantLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ParticipantQuery, ParticipantQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ParticipantQuery, ParticipantQueryVariables>(ParticipantDocument, baseOptions);
+        }
+export type ParticipantQueryHookResult = ReturnType<typeof useParticipantQuery>;
+export type ParticipantLazyQueryHookResult = ReturnType<typeof useParticipantLazyQuery>;
+export type ParticipantQueryResult = ApolloReactCommon.QueryResult<ParticipantQuery, ParticipantQueryVariables>;
 export const GetSessionDocument = gql`
-    query getSession($sessionID: ID!, $participantID: ID!) {
+    query getSession($sessionID: ID!) {
   session(sessionID: $sessionID) {
     id
     name
@@ -868,10 +911,6 @@ export const GetSessionDocument = gql`
       }
     }
   }
-  participant(id: $participantID) {
-    id
-    isModerator
-  }
 }
     `;
 
@@ -888,7 +927,6 @@ export const GetSessionDocument = gql`
  * const { data, loading, error } = useGetSessionQuery({
  *   variables: {
  *      sessionID: // value for 'sessionID'
- *      participantID: // value for 'participantID'
  *   },
  * });
  */

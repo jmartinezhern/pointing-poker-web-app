@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { Participant as ParticipantType } from '~generated/graphql'
 import { Participant } from '~components/session/Participant'
+import { useParticipant } from '~components/session/ParticipantProvider'
 
 const useStyles = makeStyles(() => ({
   participantBox: {
@@ -13,11 +14,12 @@ const useStyles = makeStyles(() => ({
 
 interface ParticipantsProps {
   votingStarted: boolean
-  participantID: string
   participants: ParticipantType[]
 }
 
-export const Participants: FunctionComponent<ParticipantsProps> = ({ votingStarted, participantID, participants }) => {
+export const Participants: FunctionComponent<ParticipantsProps> = ({ votingStarted, participants }) => {
+  const { id: participantID } = useParticipant()
+
   const classes = useStyles()
 
   participants = participants.sort((a, b) => {
