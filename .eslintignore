@@ -1,2 +1,2 @@
-src/graphql/generated-types.ts
+src/generated/graphql.tsx
 src/**/*.spec.ts

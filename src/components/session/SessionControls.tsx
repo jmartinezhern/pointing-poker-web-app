@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { StopVotingButton } from '~components/session/StopVotingButton'
 import { StartVotingButton } from '~components/session/StartVotingButton'
-import { useSession } from '~components/session/SessionProvider'
 
 const useStyles = makeStyles(theme => ({
   controlButton: {
@@ -23,15 +22,11 @@ interface Props {
 }
 
 export const SessionControls: FunctionComponent<Props> = ({ votingStarted, onEditIssueClicked }) => {
-  const { id: sessionID } = useSession()
-
   const classes = useStyles()
 
   return (
     <Grid container item spacing={2}>
-      <Grid item>
-        {votingStarted ? <StopVotingButton sessionID={sessionID} /> : <StartVotingButton sessionID={sessionID} />}
-      </Grid>
+      <Grid item>{votingStarted ? <StopVotingButton /> : <StartVotingButton />}</Grid>
       <Grid item>
         <Button
           className={classes.controlButton}
