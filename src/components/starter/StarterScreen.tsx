@@ -9,9 +9,9 @@ import {
   createStyles,
   useMediaQuery,
   useTheme,
-  Fade,
   CircularProgress,
   Snackbar,
+  Backdrop,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 
@@ -68,45 +68,39 @@ export const StarterScreen: FunctionComponent = () => {
           <Typography variant="h6">or</Typography>
         </Grid>
         <Grid item>
-          <Grid container item spacing={2} justify="center" direction="row" alignItems="center">
-            <Grid item>
-              <TextField
-                id="session-id"
-                label="Session ID"
-                onChange={({ target: { value } }) => {
-                  setSessionID(value)
-                }}
-                value={sessionID}
-                style={{ marginBottom: '14px' }}
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                className={classes.actionButton}
-                onClick={async () => {
-                  await doesSessionExist({
-                    variables: {
-                      sessionID,
-                    },
-                  })
-                }}
-              >
-                Find Session
-              </Button>
-            </Grid>
-            <Grid item>
-              <Fade in={loading}>
-                <CircularProgress />
-              </Fade>
-            </Grid>
-          </Grid>
+          <TextField
+            id="session-id"
+            label="Session ID"
+            onChange={({ target: { value } }) => {
+              setSessionID(value)
+            }}
+            value={sessionID}
+            style={{ marginBottom: '14px' }}
+          />
+        </Grid>
+        <Grid item>
+          <Button
+            className={classes.actionButton}
+            onClick={async () => {
+              await doesSessionExist({
+                variables: {
+                  sessionID,
+                },
+              })
+            }}
+          >
+            Find Session
+          </Button>
         </Grid>
       </Grid>
       <Grid item>
-        <Snackbar open={error !== undefined} autoHideDuration={10000}>
+        <Snackbar open={error !== undefined}>
           <Alert severity="error">{error?.message ?? 'Something went wrong'}</Alert>
         </Snackbar>
       </Grid>
+      <Backdrop open={loading}>
+        <CircularProgress />
+      </Backdrop>
     </Grid>
   )
 }
