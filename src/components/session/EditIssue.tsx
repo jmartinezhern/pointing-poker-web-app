@@ -11,11 +11,11 @@ interface Props {
 }
 
 export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => {
-  const { id: sessionID } = useSession()
+  const { id: sessionID, reviewingIssue: issue } = useSession()
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [url, setURL] = useState('')
+  const [title, setTitle] = useState(issue.title ?? '')
+  const [description, setDescription] = useState(issue.description ?? '')
+  const [url, setURL] = useState(issue.url ?? '')
 
   const [setIssue, { error, loading }] = useSetIssueMutation()
 
@@ -27,6 +27,7 @@ export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => 
             <TextField
               label="Title"
               fullWidth={true}
+              value={title}
               onChange={event => {
                 setTitle(event.target.value)
               }}
@@ -39,6 +40,7 @@ export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => 
               fullWidth={true}
               rows={6}
               rowsMax={10}
+              value={description}
               onChange={event => {
                 setDescription(event.target.value)
               }}
@@ -48,6 +50,7 @@ export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => 
             <TextField
               label="URL"
               fullWidth={true}
+              value={url}
               onChange={event => {
                 setURL(event.target.value)
               }}
@@ -63,9 +66,9 @@ export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => 
                       variables: {
                         sessionID,
                         description: {
-                          title,
-                          description,
-                          url,
+                          title: title === '' ? undefined : title,
+                          description: description === '' ? undefined : description,
+                          url: url === '' ? undefined : url,
                         },
                       },
                     })
