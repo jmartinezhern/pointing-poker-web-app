@@ -41,6 +41,11 @@ export const Session: FunctionComponent = () => {
         onClose={() => {
           setModalOpen(false)
         }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
         <EditIssue onCancel={closeModal} onConfirm={closeModal} />
       </Modal>

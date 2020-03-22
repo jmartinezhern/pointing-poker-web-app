@@ -8,12 +8,8 @@ import { useSession } from '~components/session/SessionProvider'
 
 const useStyles = makeStyles(theme => ({
   controlButton: {
-    backgroundColor: theme.palette.primary.main,
-    foregroundColor: theme.palette.primary.contrastText,
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
+    backgroundColor: theme.palette.info.main,
+    foregroundColor: theme.palette.info.contrastText,
   },
 }))
 

@@ -10,8 +10,8 @@ const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
 const useStyles = makeStyles(theme => ({
   voteButton: {
-    backgroundColor: theme.palette.primary.main,
-    foregroundColor: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.info.main,
+    foregroundColor: theme.palette.info.contrastText,
   },
 }))
 
