@@ -61,7 +61,7 @@ export const Session: FunctionComponent = () => {
           <Results
             votes={session.participants
               .filter(participant => !participant.isModerator)
-              .map(participant => participant.vote.points)}
+              .map(participant => participant.vote?.points ?? 0)}
           />
         </Collapse>
       </Grid>

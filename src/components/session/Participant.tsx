@@ -29,20 +29,24 @@ export const Participant: FunctionComponent<ParticipantProps> = ({
   const isCurrentParticipant = id === participantID
 
   const {
-    palette: { primary, secondary },
+    palette: { primary, secondary, success },
   } = useTheme()
 
-  const colors = isModerator
-    ? { backgroundColor: primary.main, foregroundColor: primary.contrastText }
-    : isCurrentParticipant
-    ? { backgroundColor: secondary.main, foregroundColor: secondary.contrastText }
-    : undefined
+  let colors: { backgroundColor: string; foregroundColor: string } | undefined = undefined
+
+  if (isModerator) {
+    colors = { backgroundColor: primary.main, foregroundColor: primary.contrastText }
+  } else if (isCurrentParticipant) {
+    colors = { backgroundColor: secondary.main, foregroundColor: secondary.contrastText }
+  } else if (!showVotes && vote) {
+    colors = { backgroundColor: success.main, foregroundColor: success.contrastText }
+  }
 
   const classes = useStyles()
 
   return (
     <Card className={classes.participantCard} style={colors}>
-      <CardContent color="info" style={{ flexDirection: 'column' }}>
+      <CardContent style={{ flexDirection: 'column' }}>
         <Typography variant="h5" component="h2">
           {name}
         </Typography>
