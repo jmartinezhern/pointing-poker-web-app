@@ -1,3 +1,5 @@
+dist-storybook/
+
 graphql.schema.json
 
 .idea/

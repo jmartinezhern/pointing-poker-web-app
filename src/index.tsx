@@ -9,7 +9,7 @@ import { SessionEntry } from '~components/session/SessionEntry.tsx'
 import { GraphQLProvider } from '~graphql/GraphQLProvider'
 import { CreateSession } from '~components/create/CreateSession'
 
-export const defaultTheme = createMuiTheme()
+const defaultTheme = createMuiTheme()
 
 const Root = (
   <ThemeProvider theme={defaultTheme}>

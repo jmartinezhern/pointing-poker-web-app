@@ -30,6 +30,7 @@ const SessionProvider: FunctionComponent<{ sessionID: string }> = props => {
   }
 
   if (!data || error) {
+    console.log(error, data)
     return (
       <Typography variant="h5" align="center" style={{ marginTop: '50vh' }} color="error">
         {error?.message ?? 'Something went wrong...'}
