@@ -25,7 +25,7 @@ export const SessionControls: FunctionComponent<Props> = ({ votingStarted, onEdi
   const classes = useStyles()
 
   return (
-    <Grid container item spacing={2}>
+    <Grid container item spacing={2} justify="center">
       <Grid item>{votingStarted ? <StopVotingButton /> : <StartVotingButton />}</Grid>
       <Grid item>
         <Button

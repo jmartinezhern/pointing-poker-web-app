@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react'
-import { Grid, Modal, Typography } from '@material-ui/core'
+import { Collapse, Grid, Modal, Typography } from '@material-ui/core'
 
 import { LeaveSession } from '~components/session/LeaveSession'
 import { CloseSession } from '~components/session/CloseSession'
@@ -52,27 +52,25 @@ export const Session: FunctionComponent = () => {
         <Typography variant="h2">{session.name}</Typography>
       </Grid>
       <Grid item>
-        {!session.votingStarted && (
+        <Collapse in={!session.votingStarted}>
           <Results
             votes={session.participants
               .filter(participant => !participant.isModerator)
               .map(participant => participant.vote.points)}
           />
-        )}
+        </Collapse>
       </Grid>
-      <Grid item>
-        {participant.isModerator && (
-          <SessionControls
-            votingStarted={session.votingStarted}
-            onEditIssueClicked={() => {
-              setModalOpen(true)
-            }}
-          />
-        )}
-        {session.votingStarted && !participant.isModerator && (
-          <VotingOptions pointRange={{ max: session.pointingMax, min: session.pointingMin }} />
-        )}
-      </Grid>
+      {participant.isModerator && (
+        <SessionControls
+          votingStarted={session.votingStarted}
+          onEditIssueClicked={() => {
+            setModalOpen(true)
+          }}
+        />
+      )}
+      {session.votingStarted && !participant.isModerator && (
+        <VotingOptions pointRange={{ max: session.pointingMax, min: session.pointingMin }} />
+      )}
       <Grid container item justify="center" direction="row" spacing={2}>
         <Grid item>
           <ReviewingIssue reviewingIssue={session.reviewingIssue} />

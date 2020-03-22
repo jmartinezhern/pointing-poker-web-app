@@ -36,7 +36,7 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
   const [setVoteMutation, { loading }] = useSetVoteMutation()
 
   return (
-    <Grid container item direction="row" spacing={2} style={{ width: '300px' }}>
+    <Grid container item direction="row" spacing={2} justify="center">
       <Grid item>
         <Select
           value={selection}

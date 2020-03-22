@@ -26,31 +26,23 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
 
         return accum
       }, new Map<string, number>())
-  ) as [string, number][]).sort((a, b) => {
-    if (a[1] > b[1]) {
-      return -1
-    }
-
-    if (a[1] === b[1]) {
-      return 0
-    }
-
-    return 1
-  })
+  ) as [string, number][]).sort((a, b) => Number(a[0]) - Number(b[0]))
 
   const consensus = distribution.length === 1
 
   let ties: [string, number][] = []
   if (!consensus) {
-    ties = distribution.reduce(
-      (accum, value, idx) => {
-        if (idx !== 0 && value[1] === accum[idx - 1][1]) {
-          return accum.concat([value])
-        }
-        return accum
-      },
-      [distribution[0]]
-    )
+    ties = distribution
+      .reduce(
+        (accum, value, idx) => {
+          if (idx !== 0 && value[1] === accum[idx - 1][1]) {
+            return accum.concat([value])
+          }
+          return accum
+        },
+        [distribution[0]]
+      )
+      .sort((a, b) => Number(a[0]) - Number(b[0]))
   }
 
   const tie = ties.length > 1
