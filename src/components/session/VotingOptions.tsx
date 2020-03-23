@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from 'react'
-import { Button, CircularProgress, Fade, Grid, MenuItem, Select } from '@material-ui/core'
+import { Button, CircularProgress, Fade, Grid, MenuItem, Select, Snackbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { Alert } from '@material-ui/lab'
 
 import { useSetVoteMutation } from '~generated/graphql'
 import { useSession } from '~components/session/SessionProvider'
@@ -31,12 +32,22 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
 
   const selections = fibSeq.filter(num => num >= pointRange.min && num <= pointRange.max)
 
+  const [open, setOpen] = useState(true)
+
   const [selection, setSelection] = useState(selections[0])
 
   const [setVoteMutation, { loading }] = useSetVoteMutation()
 
   return (
     <Grid container item direction="row" spacing={2} justify="center">
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="info">Voting has started</Alert>
+      </Snackbar>
       <Grid item>
         <Select
           value={selection}
