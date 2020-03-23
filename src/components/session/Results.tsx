@@ -17,37 +17,47 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
     return <Typography variant="h5">There are no votes</Typography>
   }
 
-  const distribution = (Array.from(
-    votes
-      .filter(vote => vote !== 0)
-      .reduce((accum, value) => {
-        const valueStr = String(value)
-        accum.set(valueStr, (accum.get(valueStr) ?? 0) + 1)
+  const distributionMap = votes
+    .filter(vote => vote !== 0)
+    .reduce((accum, value) => {
+      const valueStr = String(value)
 
-        return accum
-      }, new Map<string, number>())
-  ) as [string, number][]).sort((a, b) => Number(a[0]) - Number(b[0]))
+      accum.set(valueStr, (accum.get(valueStr) ?? 0) + 1)
+
+      return accum
+    }, new Map<string, number>())
+
+  const distribution = Array.from(distributionMap) as [string, number][]
 
   const consensus = distribution.length === 1
 
+  let majority: string | undefined
   let ties: [string, number][] = []
+
   if (!consensus) {
-    ties = distribution
-      .reduce(
-        (accum, value, idx) => {
-          if (idx !== 0 && value[1] === accum[idx - 1][1]) {
-            return accum.concat([value])
-          }
-          return accum
-        },
-        [distribution[0]]
-      )
-      .sort((a, b) => Number(a[0]) - Number(b[0]))
+    const majorityDistribution = distribution.slice().sort((a, b) => Number(b[1]) - Number(a[1]))
+
+    if (majorityDistribution[0][1] !== majorityDistribution[1][1]) {
+      majority = majorityDistribution[0][0]
+    }
+
+    if (!majority) {
+      ties = [majorityDistribution[0], majorityDistribution[1]]
+      for (const points of majorityDistribution.slice(2)) {
+        if (points[1] === majorityDistribution[1][1]) {
+          ties.push(points)
+        } else {
+          break
+        }
+      }
+    }
   }
 
   const tie = ties.length > 1
 
-  const data: [[string, string | number]] = [['Points', 'Votes']]
+  const data = ([['Points', 'Votes']] as [[string, string | number]]).concat(
+    distribution.slice().sort((a, b) => Number(a[0]) - Number(b[0]))
+  )
 
   return (
     <Grid
@@ -62,7 +72,7 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
       <Grid item>
         <Chart
           chartType="PieChart"
-          data={data.concat(distribution)}
+          data={data}
           options={{
             width: 200,
             backgroundColor: theme.palette.background.default,
@@ -77,28 +87,22 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
           <Typography variant="h6">Consensus!</Typography>
         </Grid>
       )}
-      {abstainees > 0 && (
-        <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
-          <Typography variant="h6">Abstained</Typography>
-          <Typography variant="body1">{abstainees}</Typography>
-        </Grid>
-      )}
-      {!consensus && !tie && (
+      {majority && (
         <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
           <Typography variant="h6">Majority</Typography>
           <Typography variant="body1">{distribution[0][0]}</Typography>
-        </Grid>
-      )}
-      {!consensus && !tie && (
-        <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
-          <Typography variant="h6">Runner-Up</Typography>
-          <Typography variant="body1">{distribution[1][0]}</Typography>
         </Grid>
       )}
       {tie && (
         <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
           <Typography variant="h6">Ties</Typography>
           <Typography variant="body1">{ties.map(value => value[0]).join(', ')}</Typography>
+        </Grid>
+      )}
+      {abstainees > 0 && (
+        <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
+          <Typography variant="h6">Abstained</Typography>
+          <Typography variant="body1">{abstainees}</Typography>
         </Grid>
       )}
     </Grid>
