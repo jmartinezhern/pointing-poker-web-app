@@ -90,7 +90,7 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
       {majority && (
         <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
           <Typography variant="h6">Majority</Typography>
-          <Typography variant="body1">{distribution[0][0]}</Typography>
+          <Typography variant="body1">{majority}</Typography>
         </Grid>
       )}
       {tie && (
