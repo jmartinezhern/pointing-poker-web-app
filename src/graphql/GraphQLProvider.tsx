@@ -10,23 +10,20 @@ import React, { FunctionComponent } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { OperationOptions, SubscriptionClient } from 'subscriptions-transport-ws'
 
-const apiID = 'fev5xxdscnesvifqf45rj3zsl4'
-const region = 'us-east-2'
-
-const wssEndpoint = `wss://${apiID}.appsync-realtime-api.${region}.amazonaws.com/graphql`
-const host = `${apiID}.appsync-api.${region}.amazonaws.com`
-const httpEndpoint = `https://${host}/graphql`
-const apiKey = 'da2-dtjbuae4jvbkhcwyfogdqhfmgm'
-
 const clientFactory = (): ApolloClient<{}> => {
+  const host = process.env.GRAPHQL_API_HOST
+  const apiKey = process.env.GRAPHQL_API_KEY
+
   const httpLink = createHttpLink({
-    uri: httpEndpoint,
+    uri: `https://${host}/graphql`,
     headers: {
       'x-amz-user-agent': 'aws-amplify/2.0.1',
     },
   })
 
   const header = { host, 'x-api-key': apiKey }
+
+  const wssEndpoint = `wss://${process.env.GRAPHQL_WS_HOST}/graphql`
 
   const subClient = new SubscriptionClient(
     `${wssEndpoint}?header=${btoa(JSON.stringify(header))}&payload=${btoa(JSON.stringify({}))}`,

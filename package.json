@@ -8,7 +8,7 @@
   "homepage": "https://pointingpoker.io",
   "scripts": {
     "clean": "rm -rf ./dist ./.cache ./node_modules ./src/graphql/generated-types.ts",
-    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",
     "commit": "git-cz",
     "tsc:check": "tsc --noEmit -p .",
     "eslint:check": "eslint 'src/**/*.{ts,tsx}'",
