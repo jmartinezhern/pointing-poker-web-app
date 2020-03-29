@@ -1,4 +1,4 @@
-import React, { ChangeEvent, CSSProperties, FunctionComponent, useState } from 'react'
+import React, { CSSProperties, FunctionComponent, useReducer } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Button,
@@ -18,11 +18,56 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { useCreateSessionMutation } from '~generated/graphql'
 
+interface State {
+  pointingRange: [number, number]
+  moderatorName: {
+    value: string
+    error?: string
+  }
+  sessionName: {
+    value: string
+    error?: string
+  }
+}
+
+interface Action {
+  type: string
+  payload: {
+    moderatorName?: string
+    sessionName?: string
+    pointingRange?: [number, number]
+  }
+}
+
 const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
 const useStyles = makeStyles(() => {
   return { nameFields: { marginTop: '1em', marginBottom: '2em' } }
 })
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'UPDATE_POINTING_RANGE':
+      if (!action.payload.pointingRange) {
+        throw new Error('pointing range is undefined')
+      }
+
+      return { ...state, pointingRange: action.payload.pointingRange }
+    case 'UPDATE_SESSION_NAME':
+      if (!action.payload.sessionName || action.payload.sessionName.length == 0) {
+        return { ...state, sessionName: { value: '', error: 'Session needs a name' } }
+      }
+
+      return { ...state, sessionName: { value: action.payload.sessionName } }
+    case 'UPDATE_MODERATOR_NAME':
+      if (!action.payload.moderatorName || action.payload.moderatorName.length == 0) {
+        return { ...state, moderatorName: { value: '', error: 'Moderator needs a name' } }
+      }
+
+      return { ...state, moderatorName: { value: action.payload.moderatorName } }
+  }
+  throw new Error(`unexpected action type ${action.type}`)
+}
 
 export const CreateSession: FunctionComponent = () => {
   const history = useHistory()
@@ -33,10 +78,11 @@ export const CreateSession: FunctionComponent = () => {
 
   const matches = useMediaQuery(theme.breakpoints.down('xs'))
 
-  const [pointingRange, setPointingRange] = useState<number[]>([0, fibSeq.length - 1])
-
-  const [sessionName, setSessionName] = useState<string>('')
-  const [moderatorName, setModeratorName] = useState<string>('')
+  const [{ pointingRange, moderatorName, sessionName }, dispatch] = useReducer(reducer, {
+    pointingRange: [0, fibSeq.length - 1],
+    moderatorName: { value: '' },
+    sessionName: { value: '' },
+  })
 
   const [createSessionMutation, { error, loading }] = useCreateSessionMutation()
 
@@ -44,38 +90,8 @@ export const CreateSession: FunctionComponent = () => {
     return matches ? { width: '75vw' } : { width: '300px' }
   }
 
-  const getSessionNameProblem = (): string | null => {
-    if (sessionName.length == 0) {
-      return 'Must provide a name'
-    }
-
-    return null
-  }
-
-  const getModeratorNameProblem = (): string | null => {
-    if (moderatorName.length == 0) {
-      return 'Must provide a name'
-    }
-
-    return null
-  }
-
   const canCreate = (): boolean => {
-    return sessionName.length != 0
-  }
-
-  const pointingRangeChanged = (_: ChangeEvent<{}>, newValue: number | number[]): void => {
-    setPointingRange(newValue as number[])
-  }
-
-  const moderatorNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value
-    setModeratorName(newValue)
-  }
-
-  const sessionNameChanged = (event: ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value
-    setSessionName(newValue)
+    return sessionName.value.length != 0
   }
 
   const createButtonClicked = async (): Promise<void> => {
@@ -85,10 +101,10 @@ export const CreateSession: FunctionComponent = () => {
       variables: {
         pointingMax: fibSeq[pointingRange[1]],
         pointingMin: fibSeq[pointingRange[0]],
-        name: sessionName,
+        name: sessionName.value,
         moderator: {
           id: moderatorID,
-          name: moderatorName,
+          name: moderatorName.value,
         },
       },
     })
@@ -114,24 +130,28 @@ export const CreateSession: FunctionComponent = () => {
       <Grid item>
         <TextField
           className={classes.nameFields}
-          error={getModeratorNameProblem() != null}
-          helperText={getModeratorNameProblem()}
+          error={moderatorName.error !== undefined}
+          helperText={moderatorName.error}
           id="moderator-name"
           label="What is your name?"
-          value={moderatorName}
-          onChange={moderatorNameChanged}
+          value={moderatorName.value}
+          onChange={event => {
+            dispatch({ type: 'UPDATE_MODERATOR_NAME', payload: { moderatorName: event.target.value } })
+          }}
           style={responsiveWidth()}
         />
       </Grid>
       <Grid item>
         <TextField
           className={classes.nameFields}
-          error={getSessionNameProblem() != null}
-          helperText={getSessionNameProblem()}
+          error={sessionName.error !== undefined}
+          helperText={sessionName.error}
           id="session-name"
           label="What is the session's name?"
-          value={sessionName}
-          onChange={sessionNameChanged}
+          value={sessionName.value}
+          onChange={event => {
+            dispatch({ type: 'UPDATE_SESSION_NAME', payload: { sessionName: event.target.value } })
+          }}
           style={responsiveWidth()}
         />
       </Grid>
@@ -143,7 +163,9 @@ export const CreateSession: FunctionComponent = () => {
       <Grid item>
         <Slider
           value={pointingRange}
-          onChange={pointingRangeChanged}
+          onChange={(_, newValue) => {
+            dispatch({ type: 'UPDATE_POINTING_RANGE', payload: { pointingRange: newValue as [number, number] } })
+          }}
           min={0}
           max={fibSeq.length - 1}
           scale={x => fibSeq[x]}
