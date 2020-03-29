@@ -5,7 +5,7 @@ mutation SetVote($sessionID: ID!, $participantID: ID! $vote: VoteDescription!) {
         pointingMax
         pointingMin
         votingStarted
-        expiration
+        expiresIn
         reviewingIssue {
             title
             url

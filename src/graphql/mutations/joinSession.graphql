@@ -5,7 +5,7 @@ mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
         pointingMax
         pointingMin
         votingStarted
-        expiration
+        expiresIn
         reviewingIssue {
             title
             url

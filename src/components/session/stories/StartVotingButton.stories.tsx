@@ -16,7 +16,7 @@ const sessionBaseline = {
   votingStarted: false,
   pointingMax: 1,
   pointingMin: 100,
-  expiration: 0,
+  expiresIn: 0,
   reviewingIssue: {
     title: null,
     description: null,

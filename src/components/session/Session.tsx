@@ -13,6 +13,18 @@ import { EditIssue } from '~components/session/EditIssue'
 import { SessionControls } from '~components/session/SessionControls'
 import { VotingOptions } from '~components/session/VotingOptions'
 
+function expirationTimestamp(delta: number): string {
+  if (delta > 60 * 60) {
+    return `${Math.floor(delta / (60 * 60))} hours`
+  }
+
+  if (delta > 60) {
+    return `${Math.floor(delta / 60)} minutes`
+  }
+
+  return `${delta} seconds`
+}
+
 export const Session: FunctionComponent = () => {
   let session = useSession()
 
@@ -34,6 +46,11 @@ export const Session: FunctionComponent = () => {
     session = data?.sessionStateChanged as SessionType
   }
 
+  const now = new Date()
+  const expiresIn = new Date(session.expiresIn * 1000)
+
+  const expires = (expiresIn.getTime() - now.getTime()) / 1000
+
   return (
     <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
       <Modal
@@ -49,7 +66,14 @@ export const Session: FunctionComponent = () => {
       >
         <EditIssue onCancel={closeModal} onConfirm={closeModal} />
       </Modal>
-      <Grid container item>
+      <Grid container item justify="flex-end" alignItems="center" direction="row" spacing={2}>
+        {expires <= 1200 && (
+          <Grid item>
+            <Typography variant="h6" color="error">
+              Session expires in {expirationTimestamp(expires)}
+            </Typography>
+          </Grid>
+        )}
         {!participant.isModerator && <LeaveSession />}
         {participant.isModerator && <CloseSession />}
       </Grid>

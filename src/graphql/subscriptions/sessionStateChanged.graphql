@@ -5,7 +5,7 @@ subscription SessionStateChanged($sessionID: ID!) {
         pointingMax
         pointingMin
         votingStarted
-        expiration
+        expiresIn
         reviewingIssue {
             title
             url
