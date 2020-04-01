@@ -76,7 +76,7 @@
     "@storybook/addon-notes": "5.3.17",
     "@storybook/addons": "5.3.17",
     "@storybook/cli": "5.3.17",
-    "@storybook/react": "5.3.17",
+    "@storybook/react": "5.3.18",
     "@types/enzyme": "3.10.5",
     "@types/enzyme-adapter-react-16": "1.0.6",
     "@types/graphql": "14.5.0",
