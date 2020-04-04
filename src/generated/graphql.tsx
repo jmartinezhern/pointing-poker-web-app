@@ -11,10 +11,61 @@ export type Scalars = {
   Float: number;
 };
 
-export type IssueDescription = {
+export type Query = {
+   __typename?: 'Query';
+  session?: Maybe<Session>;
+  participant?: Maybe<Participant>;
+};
+
+
+export type QuerySessionArgs = {
+  sessionID: Scalars['ID'];
+};
+
+
+export type QueryParticipantArgs = {
+  id: Scalars['ID'];
+};
+
+export type Session = {
+   __typename?: 'Session';
+  id: Scalars['ID'];
+  createdAt: Scalars['Int'];
+  participants: Array<Participant>;
+  name: Scalars['String'];
+  reviewingIssue: ReviewingIssue;
+  pointingMin: Scalars['Int'];
+  pointingMax: Scalars['Int'];
+  expiresIn: Scalars['Int'];
+  votingStarted: Scalars['Boolean'];
+};
+
+
+export type SessionParticipantsArgs = {
+  after?: Maybe<Scalars['ID']>;
+  first?: Maybe<Scalars['Int']>;
+};
+
+export type Participant = {
+   __typename?: 'Participant';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  isModerator: Scalars['Boolean'];
+  currentSession?: Maybe<Session>;
+  vote?: Maybe<Vote>;
+};
+
+export type Vote = {
+   __typename?: 'Vote';
+  points: Scalars['Int'];
+  abstained: Scalars['Boolean'];
+};
+
+export type ReviewingIssue = {
+   __typename?: 'ReviewingIssue';
   title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -76,13 +127,10 @@ export type MutationCloseSessionArgs = {
   sessionID: Scalars['ID'];
 };
 
-export type Participant = {
-   __typename?: 'Participant';
-  id: Scalars['ID'];
+export type SessionDescription = {
   name: Scalars['String'];
-  isModerator: Scalars['Boolean'];
-  currentSession?: Maybe<Session>;
-  vote?: Maybe<Vote>;
+  pointingMin: Scalars['Int'];
+  pointingMax: Scalars['Int'];
 };
 
 export type ParticipantDescription = {
@@ -90,52 +138,15 @@ export type ParticipantDescription = {
   name: Scalars['String'];
 };
 
-export type Query = {
-   __typename?: 'Query';
-  session?: Maybe<Session>;
-  participant?: Maybe<Participant>;
-};
-
-
-export type QuerySessionArgs = {
-  sessionID: Scalars['ID'];
-};
-
-
-export type QueryParticipantArgs = {
-  id: Scalars['ID'];
-};
-
-export type ReviewingIssue = {
-   __typename?: 'ReviewingIssue';
+export type IssueDescription = {
   title?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
-export type Session = {
-   __typename?: 'Session';
-  id: Scalars['ID'];
-  createdAt: Scalars['Int'];
-  participants: Array<Participant>;
-  name: Scalars['String'];
-  reviewingIssue: ReviewingIssue;
-  pointingMin: Scalars['Int'];
-  pointingMax: Scalars['Int'];
-  expiresIn: Scalars['Int'];
-  votingStarted: Scalars['Boolean'];
-};
-
-
-export type SessionParticipantsArgs = {
-  after?: Maybe<Scalars['ID']>;
-  first?: Maybe<Scalars['Int']>;
-};
-
-export type SessionDescription = {
-  name: Scalars['String'];
-  pointingMin: Scalars['Int'];
-  pointingMax: Scalars['Int'];
+export type VoteDescription = {
+  points?: Maybe<Scalars['Int']>;
+  abstained: Scalars['Boolean'];
 };
 
 export type Subscription = {
@@ -146,17 +157,6 @@ export type Subscription = {
 
 export type SubscriptionSessionStateChangedArgs = {
   id: Scalars['ID'];
-};
-
-export type Vote = {
-   __typename?: 'Vote';
-  points: Scalars['Int'];
-  abstained: Scalars['Boolean'];
-};
-
-export type VoteDescription = {
-  points?: Maybe<Scalars['Int']>;
-  abstained: Scalars['Boolean'];
 };
 
 export type CloseSessionMutationVariables = {
