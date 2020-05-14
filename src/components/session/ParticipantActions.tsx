@@ -27,30 +27,32 @@ export const ParticipantActions: FunctionComponent = () => {
   const classes = useStyles()
 
   return (
-    <Grid item container spacing={2} justify="center">
+    <Grid item container spacing={2} direction="row" justify="center">
       <Backdrop className={classes.backdrop} open={loading} timeout={500}>
         <CircularProgress />
       </Backdrop>
       {session.votingStarted && <VotingOptions pointRange={{ max: session.pointingMax, min: session.pointingMin }} />}
-      <ActionButton
-        title="Leave the session?"
-        description="You will be able to re-join the session as long as it remains open."
-        buttonText="Leave Session"
-        secondaryActionText="Cancel"
-        primaryActionText="Leave"
-        onPrimaryClick={async () => {
-          await leaveSessionMutation({
-            variables: {
-              sessionID: session.id,
-              participantID: participant.id,
-            },
-          })
+      <Grid item>
+        <ActionButton
+          title="Leave the session?"
+          description="You will be able to re-join the session as long as it remains open."
+          buttonText="Leave Session"
+          secondaryActionText="Cancel"
+          primaryActionText="Leave"
+          onPrimaryClick={async () => {
+            await leaveSessionMutation({
+              variables: {
+                sessionID: session.id,
+                participantID: participant.id,
+              },
+            })
 
-          localStorage.removeItem(session.id)
+            localStorage.removeItem(session.id)
 
-          history.push('/')
-        }}
-      />
+            history.push('/')
+          }}
+        />
+      </Grid>
     </Grid>
   )
 }

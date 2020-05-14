@@ -20,7 +20,7 @@ export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => 
   const [setIssue, { error, loading }] = useSetIssueMutation()
 
   return (
-    <Card style={{ minHeight: '45vh', minWidth: '400px' }}>
+    <Card style={{ minWidth: '400px' }}>
       <CardContent>
         <Grid container item direction="column" spacing={2}>
           <Grid item>
@@ -78,14 +78,11 @@ export const EditIssue: FunctionComponent<Props> = ({ onConfirm, onCancel }) => 
                     }
                   }}
                 >
-                  Confirm
+                  {loading ? <CircularProgress size={22} /> : 'Confirm'}
                 </Button>
               </Grid>
             </Grid>
             <Grid item>
-              <Collapse in={loading}>
-                <CircularProgress />
-              </Collapse>
               <Collapse in={error !== undefined}>
                 <Alert severity="error" style={{ maxWidth: '300px' }}>
                   {error?.message}

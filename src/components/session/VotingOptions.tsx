@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react'
-import { Button, CircularProgress, Fade, Grid, MenuItem, Select, Snackbar } from '@material-ui/core'
+import { Button, CircularProgress, Grid, MenuItem, Select, Snackbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 
@@ -36,10 +36,14 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
 
   const [selection, setSelection] = useState(selections[0])
 
-  const [setVoteMutation, { loading }] = useSetVoteMutation()
+  const [setVoteMutation] = useSetVoteMutation()
+
+  const [loadingVote, setLoadingVote] = useState(false)
+
+  const [loadingAbstain, setLoadingAbstain] = useState(false)
 
   return (
-    <Grid container item direction="row" spacing={2} justify="center">
+    <Grid container item direction="row" spacing={2} style={{ maxWidth: '238px' }}>
       <Snackbar
         open={open}
         autoHideDuration={2000}
@@ -55,7 +59,7 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
             setSelection(event.target.value as number)
           }}
         >
-          {fibSeq.map(num => (
+          {selections.map(num => (
             <MenuItem key={num} value={num}>
               {num}
             </MenuItem>
@@ -66,6 +70,8 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
         <Button
           className={classes.voteButton}
           onClick={async () => {
+            setLoadingVote(true)
+
             await setVoteMutation({
               variables: {
                 sessionID,
@@ -75,16 +81,18 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
                   abstained: false,
                 },
               },
-            })
+            }).finally(() => setLoadingVote(false))
           }}
         >
-          Vote
+          {loadingVote ? <CircularProgress size={22} /> : 'Vote'}
         </Button>
       </Grid>
       <Grid item>
         <Button
           className={classes.voteButton}
           onClick={async () => {
+            setLoadingAbstain(true)
+
             await setVoteMutation({
               variables: {
                 sessionID,
@@ -94,16 +102,13 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
                   abstained: true,
                 },
               },
+            }).finally(() => {
+              setLoadingAbstain(false)
             })
           }}
         >
-          Abstain
+          {loadingAbstain ? <CircularProgress size={22} /> : 'Abstain'}
         </Button>
-      </Grid>
-      <Grid item>
-        <Fade in={loading}>
-          <CircularProgress />
-        </Fade>
       </Grid>
     </Grid>
   )
