@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Participant as ParticipantType } from '~generated/graphql'
 import { Participant } from '~components/session/Participant'
 import { useParticipant } from '~components/session/ParticipantProvider'
+import { useSession } from '~components/session/SessionProvider'
 
 const useStyles = makeStyles(() => ({
   participantBox: {
@@ -12,35 +13,32 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-interface ParticipantsProps {
-  votingStarted: boolean
-  participants: ParticipantType[]
+const sortParticipants = (a: ParticipantType, b: ParticipantType): number => {
+  if (a.isModerator) {
+    return -1
+  } else if (b.isModerator) {
+    return 1
+  }
+
+  if (a.name == b.name) {
+    return 0
+  } else if (a.name > b.name) {
+    return 1
+  }
+
+  return -1
 }
 
-export const Participants: FunctionComponent<ParticipantsProps> = ({ votingStarted, participants }) => {
+export const Participants: FunctionComponent = () => {
+  const { participants, votingStarted } = useSession()
+
   const { id: participantID } = useParticipant()
 
   const classes = useStyles()
 
-  participants = participants.sort((a, b) => {
-    if (a.isModerator) {
-      return -1
-    } else if (b.isModerator) {
-      return 1
-    }
-
-    if (a.name == b.name) {
-      return 0
-    } else if (a.name > b.name) {
-      return 1
-    }
-
-    return -1
-  })
-
   return (
     <List disablePadding={true}>
-      {participants.map(participant => (
+      {participants.sort(sortParticipants).map(participant => (
         <ListItem className={classes.participantBox} key={participant.id} dense={true}>
           <Participant
             participant={participant}

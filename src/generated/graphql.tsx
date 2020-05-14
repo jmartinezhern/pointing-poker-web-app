@@ -832,7 +832,7 @@ export const DoesSessionExistDocument = gql`
  * __useDoesSessionExistQuery__
  *
  * To run a query within a React component, call `useDoesSessionExistQuery` and pass it any options that fit your needs.
- * When your component renders, `useDoesSessionExistQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useDoesSessionExistQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -866,7 +866,7 @@ export const ParticipantDocument = gql`
  * __useParticipantQuery__
  *
  * To run a query within a React component, call `useParticipantQuery` and pass it any options that fit your needs.
- * When your component renders, `useParticipantQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useParticipantQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -918,7 +918,7 @@ export const GetSessionDocument = gql`
  * __useGetSessionQuery__
  *
  * To run a query within a React component, call `useGetSessionQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -970,7 +970,7 @@ export const SessionStateChangedDocument = gql`
  * __useSessionStateChangedSubscription__
  *
  * To run a query within a React component, call `useSessionStateChangedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useSessionStateChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useSessionStateChangedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

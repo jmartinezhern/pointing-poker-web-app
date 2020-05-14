@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useState } from 'react'
 import { Collapse, Grid, Modal, Typography } from '@material-ui/core'
 
-import { LeaveSession } from '~components/session/LeaveSession'
-import { CloseSession } from '~components/session/CloseSession'
 import { Participants } from '~components/session/Participants'
 import { ReviewingIssue } from '~components/session/ReviewingIssue'
 import { Results } from '~components/session/Results'
@@ -11,7 +9,7 @@ import { useParticipant } from '~components/session/ParticipantProvider'
 import { Session as SessionType, useSessionStateChangedSubscription } from '~generated/graphql'
 import { EditIssue } from '~components/session/EditIssue'
 import { SessionControls } from '~components/session/SessionControls'
-import { VotingOptions } from '~components/session/VotingOptions'
+import { ParticipantActions } from '~components/session/ParticipantActions'
 
 function expirationTimestamp(delta: number): string {
   if (delta > 60 * 60) {
@@ -74,8 +72,6 @@ export const Session: FunctionComponent = () => {
             </Typography>
           </Grid>
         )}
-        {!participant.isModerator && <LeaveSession />}
-        {participant.isModerator && <CloseSession />}
       </Grid>
       <Grid item>
         <Typography variant="h2">{session.name}</Typography>
@@ -89,23 +85,21 @@ export const Session: FunctionComponent = () => {
           />
         </Collapse>
       </Grid>
-      {participant.isModerator && (
+      {participant.isModerator ? (
         <SessionControls
-          votingStarted={session.votingStarted}
           onEditIssueClicked={() => {
             setModalOpen(true)
           }}
         />
-      )}
-      {session.votingStarted && !participant.isModerator && (
-        <VotingOptions pointRange={{ max: session.pointingMax, min: session.pointingMin }} />
+      ) : (
+        <ParticipantActions />
       )}
       <Grid container item justify="center" direction="row" spacing={2}>
         <Grid item>
           <ReviewingIssue reviewingIssue={session.reviewingIssue} />
         </Grid>
         <Grid item>
-          <Participants participants={session.participants} votingStarted={session.votingStarted} />
+          <Participants />
         </Grid>
       </Grid>
     </Grid>
