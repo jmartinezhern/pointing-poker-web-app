@@ -21,5 +21,5 @@ GRAPHQL_WS_HOST=<websockets_host_url_for_your_api>
 Then run:
 
 ```shell script
-npm run build # build script use NODE_ENV=production by default
+NODE_ENV=production npm run build
 ```
