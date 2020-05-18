@@ -15,7 +15,7 @@
     "eslint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "test": "jest --runInBand",
     "test:coverage": "npm run test -- --coverage",
-    "build": "npm run codegen && parcel build --no-cache src/index.html",
+    "build": "parcel build --no-cache src/index.html",
     "test:watch": "jest --watch",
     "storybook:start": "start-storybook",
     "storybook:build": "build-storybook -c .storybook -o dist-storybook"
