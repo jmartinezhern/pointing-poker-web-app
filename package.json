@@ -87,7 +87,7 @@
     "@types/storybook__react": "5.2.1",
     "@types/uuid": "7.0.3",
     "@types/ws": "7.2.4",
-    "@typescript-eslint/eslint-plugin": "2.33.0",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.33.0",
     "babel-loader": "8.1.0",
     "babel-types": "6.26.0",
