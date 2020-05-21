@@ -6,6 +6,7 @@ mutation SetVote($sessionID: ID!, $participantID: ID! $vote: VoteDescription!) {
         pointingMin
         votingStarted
         expiresIn
+        closed
         reviewingIssue {
             title
             url

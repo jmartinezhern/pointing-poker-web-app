@@ -6,6 +6,7 @@ mutation StopVoting($sessionID: ID!) {
         pointingMin
         votingStarted
         expiresIn
+        closed
         reviewingIssue {
             title
             url

@@ -6,6 +6,7 @@ query getSession($sessionID: ID!) {
         pointingMin
         votingStarted
         expiresIn
+        closed
         reviewingIssue {
             title
             url
