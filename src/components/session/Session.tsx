@@ -1,5 +1,6 @@
-import React, { FunctionComponent, useState } from 'react'
-import { Collapse, Grid, Modal, Typography } from '@material-ui/core'
+import React, { FunctionComponent, useEffect, useState } from 'react'
+import { CircularProgress, Collapse, Grid, Modal, Typography } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
 
 import { Participants } from '~components/session/Participants'
 import { ReviewingIssue } from '~components/session/ReviewingIssue'
@@ -28,6 +29,8 @@ export const Session: FunctionComponent = () => {
 
   const participant = useParticipant()
 
+  const history = useHistory()
+
   const { data, loading } = useSessionStateChangedSubscription({
     variables: {
       sessionID: session.id,
@@ -48,6 +51,39 @@ export const Session: FunctionComponent = () => {
   const expiresIn = new Date(session.expiresIn * 1000)
 
   const expires = (expiresIn.getTime() - now.getTime()) / 1000
+
+  const closed = session.closed || expires === 0
+
+  useEffect(() => {
+    if (closed) {
+      const timer = setTimeout(() => {
+        history.push('/')
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  })
+
+  if (session.closed || expires === 0) {
+    return (
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        spacing={0}
+        style={{ minHeight: '100vh' }}
+      >
+        <Grid item>
+          <Typography variant="h5" align="center">
+            The current session has closed. Leaving...
+          </Typography>
+        </Grid>
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    )
+  }
 
   return (
     <Grid container justify="center" alignItems="center" direction="column" spacing={4}>

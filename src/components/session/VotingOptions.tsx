@@ -43,7 +43,7 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
   const [loadingAbstain, setLoadingAbstain] = useState(false)
 
   return (
-    <Grid container item direction="row" spacing={2} style={{ maxWidth: '238px' }}>
+    <Grid container item direction="row" spacing={2} style={{ maxWidth: '256px' }}>
       <Snackbar
         open={open}
         autoHideDuration={2000}
@@ -58,6 +58,7 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
           onChange={event => {
             setSelection(event.target.value as number)
           }}
+          style={{ width: '50px' }}
         >
           {selections.map(num => (
             <MenuItem key={num} value={num}>

@@ -6,6 +6,7 @@ mutation LeaveSession($sessionID: ID!, $participantID: ID!) {
         pointingMin
         votingStarted
         expiresIn
+        closed
         reviewingIssue {
             title
             url

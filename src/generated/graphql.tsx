@@ -38,6 +38,7 @@ export type Session = {
   pointingMax: Scalars['Int'];
   expiresIn: Scalars['Int'];
   votingStarted: Scalars['Boolean'];
+  closed: Scalars['Boolean'];
 };
 
 
@@ -168,7 +169,7 @@ export type CloseSessionMutation = (
   { __typename?: 'Mutation' }
   & { closeSession?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -209,7 +210,7 @@ export type JoinSessionMutation = (
   { __typename?: 'Mutation' }
   & { joinSession?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -234,7 +235,7 @@ export type LeaveSessionMutation = (
   { __typename?: 'Mutation' }
   & { leaveSession?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -259,7 +260,7 @@ export type SetIssueMutation = (
   { __typename?: 'Mutation' }
   & { setReviewingIssue?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -285,7 +286,7 @@ export type SetVoteMutation = (
   { __typename?: 'Mutation' }
   & { setVote?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -309,7 +310,7 @@ export type StartVotingMutation = (
   { __typename?: 'Mutation' }
   & { startVoting?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -333,7 +334,7 @@ export type StopVotingMutation = (
   { __typename?: 'Mutation' }
   & { stopVoting?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -383,7 +384,7 @@ export type GetSessionQuery = (
   { __typename?: 'Query' }
   & { session?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -407,7 +408,7 @@ export type SessionStateChangedSubscription = (
   { __typename?: 'Subscription' }
   & { sessionStateChanged?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
+    & Pick<Session, 'id' | 'name' | 'closed' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -432,6 +433,7 @@ export const CloseSessionDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -518,6 +520,7 @@ export const JoinSessionDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -570,6 +573,7 @@ export const LeaveSessionDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -622,6 +626,7 @@ export const SetIssueDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -674,6 +679,7 @@ export const SetVoteDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -727,6 +733,7 @@ export const StartVotingDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -778,6 +785,7 @@ export const StopVotingDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -896,6 +904,7 @@ export const GetSessionDocument = gql`
     pointingMin
     votingStarted
     expiresIn
+    closed
     reviewingIssue {
       title
       url
@@ -944,6 +953,7 @@ export const SessionStateChangedDocument = gql`
   sessionStateChanged(id: $sessionID) {
     id
     name
+    closed
     pointingMax
     pointingMin
     votingStarted

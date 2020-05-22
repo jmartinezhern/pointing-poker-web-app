@@ -6,6 +6,7 @@ mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
         pointingMin
         votingStarted
         expiresIn
+        closed
         reviewingIssue {
             title
             url

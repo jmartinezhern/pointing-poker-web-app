@@ -2,6 +2,7 @@ subscription SessionStateChanged($sessionID: ID!) {
     sessionStateChanged(id: $sessionID) {
         id
         name
+        closed
         pointingMax
         pointingMin
         votingStarted
