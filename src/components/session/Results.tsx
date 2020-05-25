@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
-import { Grid, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import { Chart } from 'react-google-charts'
+import { Grid, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 
 interface Props {
   votes: number[]
@@ -11,23 +11,23 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
 
   const matches = useMediaQuery(theme.breakpoints.down('xs'))
 
-  const abstainees = votes.filter(vote => vote === 0).length
+  const abstainers = votes.filter(vote => vote === 0).length
 
-  if (votes.length === 0 || votes.length === abstainees) {
+  if (votes.length === 0 || votes.length === abstainers) {
     return <Typography variant="h5">There are no votes</Typography>
   }
 
-  const distributionMap = votes
-    .filter(vote => vote !== 0)
-    .reduce((accum, value) => {
-      const valueStr = String(value)
+  const distribution = Array.from(
+    votes
+      .filter(vote => vote !== 0)
+      .reduce((accum, value) => {
+        const valueStr = String(value)
 
-      accum.set(valueStr, (accum.get(valueStr) ?? 0) + 1)
+        accum.set(valueStr, (accum.get(valueStr) ?? 0) + 1)
 
-      return accum
-    }, new Map<string, number>())
-
-  const distribution = Array.from(distributionMap) as [string, number][]
+        return accum
+      }, new Map<string, number>())
+  ) as [string, number][]
 
   const consensus = distribution.length === 1
 
@@ -35,29 +35,20 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
   let ties: [string, number][] = []
 
   if (!consensus) {
-    const majorityDistribution = distribution.slice().sort((a, b) => Number(b[1]) - Number(a[1]))
+    const majorityDistribution = distribution.slice().sort((a, b) => b[1] - a[1])
 
     if (majorityDistribution[0][1] !== majorityDistribution[1][1]) {
       majority = majorityDistribution[0][0]
     }
 
     if (!majority) {
-      ties = [majorityDistribution[0], majorityDistribution[1]]
-      for (const points of majorityDistribution.slice(2)) {
-        if (points[1] === majorityDistribution[1][1]) {
-          ties.push(points)
-        } else {
-          break
-        }
-      }
+      ties = [majorityDistribution[0], majorityDistribution[1]].concat(
+        majorityDistribution.slice(2).filter(points => points[1] === majorityDistribution[1][1])
+      )
     }
   }
 
-  const tie = ties.length > 1
-
-  const data = ([['Points', 'Votes']] as [[string, string | number]]).concat(
-    distribution.slice().sort((a, b) => Number(a[0]) - Number(b[0]))
-  )
+  const data = ([['Points', 'Votes']] as [[string, string | number]]).concat(distribution)
 
   return (
     <Grid
@@ -93,16 +84,16 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
           <Typography variant="body1">{majority}</Typography>
         </Grid>
       )}
-      {tie && (
+      {ties.length > 1 && (
         <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
           <Typography variant="h6">Ties</Typography>
           <Typography variant="body1">{ties.map(value => value[0]).join(', ')}</Typography>
         </Grid>
       )}
-      {abstainees > 0 && (
+      {abstainers > 0 && (
         <Grid container item direction="column" alignItems="center" style={{ width: '150px' }}>
           <Typography variant="h6">Abstained</Typography>
-          <Typography variant="body1">{abstainees}</Typography>
+          <Typography variant="body1">{abstainers}</Typography>
         </Grid>
       )}
     </Grid>

@@ -3,9 +3,9 @@ import { List, ListItem } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { Participant as ParticipantType } from '~generated/graphql'
-import { Participant } from '~components/session/Participant'
-import { useParticipant } from '~components/session/ParticipantProvider'
-import { useSession } from '~components/session/SessionProvider'
+import { Participant } from '~components/session/participants/Participant'
+import { useParticipant } from '~components/core/ParticipantProvider'
+import { useSession } from '~components/core/SessionProvider'
 
 const useStyles = makeStyles(() => ({
   participantBox: {

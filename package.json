@@ -2,10 +2,10 @@
   "name": "pointing-poker-web-app",
   "repository": "github.com/jmartinezhern/pointing-poker",
   "version": "0.0.1",
-  "description": "Web Application for pointingpoker.io",
+  "description": "Web Application for pointingpoker.app",
   "author": "Jorge Martinez Hernandez",
   "license": "SEE LICENSE IN LICENSE",
-  "homepage": "https://pointingpoker.io",
+  "homepage": "https://pointingpoker.app",
   "scripts": {
     "clean": "rm -rf ./dist ./.cache ./node_modules ./src/graphql/generated-types.ts",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",

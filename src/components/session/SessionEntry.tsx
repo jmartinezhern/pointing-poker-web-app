@@ -4,8 +4,8 @@ import { Grid } from '@material-ui/core'
 
 import { JoinSession } from '~components/session/JoinSession'
 import { Session } from '~components/session/Session'
-import { SessionProvider } from '~components/session/SessionProvider'
-import { ParticipantProvider } from '~components/session/ParticipantProvider'
+import { SessionProvider } from '~components/core/SessionProvider'
+import { ParticipantProvider } from '~components/core/ParticipantProvider'
 
 export const SessionEntry: FunctionComponent = () => {
   const { sessionID } = useParams<{ sessionID: string }>()

@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { Participant as ParticipantType } from '~generated/graphql'
-import { useParticipant } from '~components/session/ParticipantProvider'
+import { useParticipant } from '~components/core/ParticipantProvider'
 
 interface ParticipantProps {
   showVotes: boolean

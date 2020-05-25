@@ -4,10 +4,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
 import { ActionButton } from '~components/session/ActionButton.tsx'
-import { VotingOptions } from '~components/session/VotingOptions'
+import { VotingOptions } from '~components/session/participants/VotingOptions'
 import { useLeaveSessionMutation } from '~generated/graphql'
-import { useSession } from '~components/session/SessionProvider'
-import { useParticipant } from '~components/session/ParticipantProvider'
+import { useSession } from '~components/core/SessionProvider'
+import { useParticipant } from '~components/core/ParticipantProvider'
 
 const useStyles = makeStyles(theme => ({
   backdrop: {

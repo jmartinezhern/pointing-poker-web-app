@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react'
-import { Button, Grid, Snackbar } from '@material-ui/core'
+import { Button, CircularProgress, Grid, Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useStopVotingMutation } from '~generated/graphql'
-import { useSession } from '~components/session/SessionProvider'
+import { useSession } from '~components/core/SessionProvider'
 
 const useStyles = makeStyles(theme => ({
   controlButton: {
@@ -32,11 +32,8 @@ export const StopVotingButton: FunctionComponent = () => {
           await stopVoting()
         }}
       >
-        Stop Voting
+        {loading ? <CircularProgress size={22} /> : 'Stop Voting'}
       </Button>
-      <Snackbar open={loading} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-        <Alert severity="info">Voting is stopping</Alert>
-      </Snackbar>
       <Snackbar open={error !== undefined} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert severity="error">{error?.message ?? 'Failed to stop voting'}</Alert>
       </Snackbar>

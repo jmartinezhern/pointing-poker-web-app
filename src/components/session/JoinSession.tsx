@@ -2,8 +2,8 @@ import React, { FunctionComponent, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, CircularProgress, createStyles, Fade, Grid, Snackbar, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { v4 as uuidv4 } from 'uuid'
 import { Alert } from '@material-ui/lab'
+import { v4 as uuidv4 } from 'uuid'
 
 import { useJoinSessionMutation } from '~generated/graphql'
 

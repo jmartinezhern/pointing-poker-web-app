@@ -3,7 +3,7 @@ import { Button, Card, CardContent, CircularProgress, Collapse, Grid, TextField 
 import { Alert } from '@material-ui/lab'
 
 import { useSetIssueMutation } from '~generated/graphql'
-import { useSession } from '~components/session/SessionProvider'
+import { useSession } from '~components/core/SessionProvider'
 
 interface Props {
   onConfirm?: () => void

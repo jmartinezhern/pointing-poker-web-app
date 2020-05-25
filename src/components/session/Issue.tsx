@@ -7,7 +7,7 @@ interface ReviewingIssueProps {
   reviewingIssue: ReviewingIssueType
 }
 
-export const ReviewingIssue: FunctionComponent<ReviewingIssueProps> = ({ reviewingIssue }) => {
+export const Issue: FunctionComponent<ReviewingIssueProps> = ({ reviewingIssue }) => {
   return (
     <Card>
       <CardContent>

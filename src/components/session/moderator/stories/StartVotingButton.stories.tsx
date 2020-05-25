@@ -4,19 +4,21 @@ import { Container } from '@material-ui/core'
 import { MockedProvider, MockedResponse } from '@apollo/react-testing'
 import { FetchResult } from 'apollo-link'
 
-import { StartVotingButton } from '~components/session/StartVotingButton'
-import { SessionProvider } from '~components/session/SessionProvider'
-import { GetSessionDocument, StartVotingDocument } from '~generated/graphql'
+import { StartVotingButton } from '~components/session/moderator/StartVotingButton'
+import { SessionProvider } from '~components/core/SessionProvider'
+import { GetSessionDocument, Session, StartVotingDocument } from '~generated/graphql'
 
 const sessionID = '1'
 
-const sessionBaseline = {
+const session: Session = {
   id: sessionID,
   name: 'Session',
   votingStarted: false,
   pointingMax: 1,
   pointingMin: 100,
   expiresIn: 0,
+  createdAt: Date.now(),
+  closed: false,
   reviewingIssue: {
     title: null,
     description: null,
@@ -27,7 +29,7 @@ const sessionBaseline = {
 
 const fetchSession = (): FetchResult => ({
   data: {
-    session: sessionBaseline,
+    session: session,
   },
 })
 
@@ -37,7 +39,7 @@ storiesOf('StartVotingButton', module)
     const fetchStartVotingResult = (): FetchResult => ({
       data: {
         startVoting: {
-          ...sessionBaseline,
+          ...session,
           votingStarted: true,
         },
       },

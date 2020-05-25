@@ -1,11 +1,10 @@
 import React, { FunctionComponent, useState } from 'react'
-import { Button, CircularProgress, Grid, MenuItem, Select, Snackbar } from '@material-ui/core'
+import { Button, CircularProgress, Grid, MenuItem, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Alert } from '@material-ui/lab'
 
 import { useSetVoteMutation } from '~generated/graphql'
-import { useSession } from '~components/session/SessionProvider'
-import { useParticipant } from '~components/session/ParticipantProvider'
+import { useSession } from '~components/core/SessionProvider'
+import { useParticipant } from '~components/core/ParticipantProvider'
 
 const fibSeq = [1, 2, 3, 5, 8, 13, 20, 40, 100]
 
@@ -32,8 +31,6 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
 
   const selections = fibSeq.filter(num => num >= pointRange.min && num <= pointRange.max)
 
-  const [open, setOpen] = useState(true)
-
   const [selection, setSelection] = useState(selections[0])
 
   const [setVoteMutation] = useSetVoteMutation()
@@ -44,14 +41,6 @@ export const VotingOptions: FunctionComponent<Props> = ({ pointRange }) => {
 
   return (
     <Grid container item direction="row" spacing={2} style={{ maxWidth: '256px' }}>
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={() => setOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert severity="info">Voting has started</Alert>
-      </Snackbar>
       <Grid item>
         <Select
           value={selection}

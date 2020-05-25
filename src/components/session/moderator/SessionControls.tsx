@@ -4,9 +4,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
 import { ActionButton } from '~components/session/ActionButton.tsx'
-import { StopVotingButton } from '~components/session/StopVotingButton'
-import { StartVotingButton } from '~components/session/StartVotingButton'
-import { useSession } from '~components/session/SessionProvider'
+import { StopVotingButton } from '~components/session/moderator/StopVotingButton'
+import { StartVotingButton } from '~components/session/moderator/StartVotingButton'
+import { useSession } from '~components/core/SessionProvider'
 import { useCloseSessionMutation } from '~generated/graphql'
 
 const useStyles = makeStyles(theme => ({

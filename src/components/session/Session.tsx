@@ -1,16 +1,16 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { CircularProgress, Collapse, Grid, Modal, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import { CircularProgress, Collapse, Grid, Modal, Typography } from '@material-ui/core'
 
 import { Participants } from '~components/session/Participants'
-import { ReviewingIssue } from '~components/session/ReviewingIssue'
+import { Issue } from '~/components/session/Issue.tsx'
 import { Results } from '~components/session/Results'
-import { useSession } from '~components/session/SessionProvider'
-import { useParticipant } from '~components/session/ParticipantProvider'
+import { useSession } from '~components/core/SessionProvider'
+import { useParticipant } from '~components/core/ParticipantProvider'
+import { EditIssue } from '~components/session/moderator/EditIssue'
+import { SessionControls } from '~components/session/moderator/SessionControls'
+import { ParticipantActions } from '~components/session/participants/ParticipantActions'
 import { Session as SessionType, useSessionStateChangedSubscription } from '~generated/graphql'
-import { EditIssue } from '~components/session/EditIssue'
-import { SessionControls } from '~components/session/SessionControls'
-import { ParticipantActions } from '~components/session/ParticipantActions'
 
 function expirationTimestamp(delta: number): string {
   if (delta > 60 * 60) {
@@ -31,13 +31,13 @@ export const Session: FunctionComponent = () => {
 
   const history = useHistory()
 
+  const [modalOpen, setModalOpen] = useState(false)
+
   const { data, loading } = useSessionStateChangedSubscription({
     variables: {
       sessionID: session.id,
     },
   })
-
-  const [modalOpen, setModalOpen] = useState(false)
 
   const closeModal = (): void => {
     setModalOpen(false)
@@ -58,7 +58,7 @@ export const Session: FunctionComponent = () => {
     if (closed) {
       const timer = setTimeout(() => {
         history.push('/')
-      }, 5000)
+      }, 3000)
       return () => clearTimeout(timer)
     }
   })
@@ -132,7 +132,7 @@ export const Session: FunctionComponent = () => {
       )}
       <Grid container item justify="center" direction="row" spacing={2}>
         <Grid item>
-          <ReviewingIssue reviewingIssue={session.reviewingIssue} />
+          <Issue reviewingIssue={session.reviewingIssue} />
         </Grid>
         <Grid item>
           <Participants />
