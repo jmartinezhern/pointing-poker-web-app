@@ -68,7 +68,7 @@
     "@graphql-codegen/introspection": "1.13.5",
     "@graphql-codegen/typescript": "1.13.5",
     "@graphql-codegen/typescript-operations": "1.13.5",
-    "@graphql-codegen/typescript-react-apollo": "1.13.5",
+    "@graphql-codegen/typescript-react-apollo": "1.15.3",
     "@graphql-codegen/typescript-resolvers": "1.13.5",
     "@storybook/addon-actions": "5.3.18",
     "@storybook/addon-links": "5.3.18",
