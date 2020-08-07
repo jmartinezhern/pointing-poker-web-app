@@ -60,7 +60,7 @@
     "react-google-charts": "3.0.15",
     "react-router-dom": "5.2.0",
     "subscriptions-transport-ws": "0.9.16",
-    "uuid": "8.0.0"
+    "uuid": "8.3.0"
   },
   "devDependencies": {
     "@apollo/react-testing": "3.1.4",
