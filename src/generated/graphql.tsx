@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+const gql = Apollo.gql;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,7 +12,7 @@ export type Scalars = {
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   session?: Maybe<Session>;
   participant?: Maybe<Participant>;
 };
@@ -28,7 +28,7 @@ export type QueryParticipantArgs = {
 };
 
 export type Session = {
-   __typename?: 'Session';
+  __typename?: 'Session';
   id: Scalars['ID'];
   createdAt: Scalars['Int'];
   participants: Array<Participant>;
@@ -48,7 +48,7 @@ export type SessionParticipantsArgs = {
 };
 
 export type Participant = {
-   __typename?: 'Participant';
+  __typename?: 'Participant';
   id: Scalars['ID'];
   name: Scalars['String'];
   isModerator: Scalars['Boolean'];
@@ -57,20 +57,20 @@ export type Participant = {
 };
 
 export type Vote = {
-   __typename?: 'Vote';
+  __typename?: 'Vote';
   points: Scalars['Int'];
   abstained: Scalars['Boolean'];
 };
 
 export type ReviewingIssue = {
-   __typename?: 'ReviewingIssue';
+  __typename?: 'ReviewingIssue';
   title?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   createSession?: Maybe<Session>;
   setReviewingIssue?: Maybe<Session>;
   setVote?: Maybe<Session>;
@@ -151,7 +151,7 @@ export type VoteDescription = {
 };
 
 export type Subscription = {
-   __typename?: 'Subscription';
+  __typename?: 'Subscription';
   sessionStateChanged?: Maybe<Session>;
 };
 
@@ -160,9 +160,9 @@ export type SubscriptionSessionStateChangedArgs = {
   id: Scalars['ID'];
 };
 
-export type CloseSessionMutationVariables = {
+export type CloseSessionMutationVariables = Exact<{
   sessionID: Scalars['ID'];
-};
+}>;
 
 
 export type CloseSessionMutation = (
@@ -184,12 +184,12 @@ export type CloseSessionMutation = (
   )> }
 );
 
-export type CreateSessionMutationVariables = {
+export type CreateSessionMutationVariables = Exact<{
   name: Scalars['String'];
   pointingMin: Scalars['Int'];
   pointingMax: Scalars['Int'];
   moderator: ParticipantDescription;
-};
+}>;
 
 
 export type CreateSessionMutation = (
@@ -200,10 +200,10 @@ export type CreateSessionMutation = (
   )> }
 );
 
-export type JoinSessionMutationVariables = {
+export type JoinSessionMutationVariables = Exact<{
   sessionID: Scalars['ID'];
   participant?: Maybe<ParticipantDescription>;
-};
+}>;
 
 
 export type JoinSessionMutation = (
@@ -225,10 +225,10 @@ export type JoinSessionMutation = (
   )> }
 );
 
-export type LeaveSessionMutationVariables = {
+export type LeaveSessionMutationVariables = Exact<{
   sessionID: Scalars['ID'];
   participantID: Scalars['ID'];
-};
+}>;
 
 
 export type LeaveSessionMutation = (
@@ -250,10 +250,10 @@ export type LeaveSessionMutation = (
   )> }
 );
 
-export type SetIssueMutationVariables = {
+export type SetIssueMutationVariables = Exact<{
   sessionID: Scalars['ID'];
   description: IssueDescription;
-};
+}>;
 
 
 export type SetIssueMutation = (
@@ -275,11 +275,11 @@ export type SetIssueMutation = (
   )> }
 );
 
-export type SetVoteMutationVariables = {
+export type SetVoteMutationVariables = Exact<{
   sessionID: Scalars['ID'];
   participantID: Scalars['ID'];
   vote: VoteDescription;
-};
+}>;
 
 
 export type SetVoteMutation = (
@@ -301,9 +301,9 @@ export type SetVoteMutation = (
   )> }
 );
 
-export type StartVotingMutationVariables = {
+export type StartVotingMutationVariables = Exact<{
   sessionID: Scalars['ID'];
-};
+}>;
 
 
 export type StartVotingMutation = (
@@ -325,9 +325,9 @@ export type StartVotingMutation = (
   )> }
 );
 
-export type StopVotingMutationVariables = {
+export type StopVotingMutationVariables = Exact<{
   sessionID: Scalars['ID'];
-};
+}>;
 
 
 export type StopVotingMutation = (
@@ -349,9 +349,9 @@ export type StopVotingMutation = (
   )> }
 );
 
-export type DoesSessionExistQueryVariables = {
+export type DoesSessionExistQueryVariables = Exact<{
   sessionID: Scalars['ID'];
-};
+}>;
 
 
 export type DoesSessionExistQuery = (
@@ -362,9 +362,9 @@ export type DoesSessionExistQuery = (
   )> }
 );
 
-export type ParticipantQueryVariables = {
+export type ParticipantQueryVariables = Exact<{
   participantID: Scalars['ID'];
-};
+}>;
 
 
 export type ParticipantQuery = (
@@ -375,16 +375,16 @@ export type ParticipantQuery = (
   )> }
 );
 
-export type GetSessionQueryVariables = {
+export type GetSessionQueryVariables = Exact<{
   sessionID: Scalars['ID'];
-};
+}>;
 
 
 export type GetSessionQuery = (
   { __typename?: 'Query' }
   & { session?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'expiresIn' | 'closed'>
+    & Pick<Session, 'id' | 'name' | 'pointingMax' | 'pointingMin' | 'votingStarted' | 'createdAt' | 'expiresIn' | 'closed'>
     & { reviewingIssue: (
       { __typename?: 'ReviewingIssue' }
       & Pick<ReviewingIssue, 'title' | 'url' | 'description'>
@@ -399,9 +399,9 @@ export type GetSessionQuery = (
   )> }
 );
 
-export type SessionStateChangedSubscriptionVariables = {
+export type SessionStateChangedSubscriptionVariables = Exact<{
   sessionID: Scalars['ID'];
-};
+}>;
 
 
 export type SessionStateChangedSubscription = (
@@ -451,7 +451,7 @@ export const CloseSessionDocument = gql`
   }
 }
     `;
-export type CloseSessionMutationFn = ApolloReactCommon.MutationFunction<CloseSessionMutation, CloseSessionMutationVariables>;
+export type CloseSessionMutationFn = Apollo.MutationFunction<CloseSessionMutation, CloseSessionMutationVariables>;
 
 /**
  * __useCloseSessionMutation__
@@ -470,12 +470,12 @@ export type CloseSessionMutationFn = ApolloReactCommon.MutationFunction<CloseSes
  *   },
  * });
  */
-export function useCloseSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CloseSessionMutation, CloseSessionMutationVariables>) {
-        return ApolloReactHooks.useMutation<CloseSessionMutation, CloseSessionMutationVariables>(CloseSessionDocument, baseOptions);
+export function useCloseSessionMutation(baseOptions?: Apollo.MutationHookOptions<CloseSessionMutation, CloseSessionMutationVariables>) {
+        return Apollo.useMutation<CloseSessionMutation, CloseSessionMutationVariables>(CloseSessionDocument, baseOptions);
       }
 export type CloseSessionMutationHookResult = ReturnType<typeof useCloseSessionMutation>;
-export type CloseSessionMutationResult = ApolloReactCommon.MutationResult<CloseSessionMutation>;
-export type CloseSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<CloseSessionMutation, CloseSessionMutationVariables>;
+export type CloseSessionMutationResult = Apollo.MutationResult<CloseSessionMutation>;
+export type CloseSessionMutationOptions = Apollo.BaseMutationOptions<CloseSessionMutation, CloseSessionMutationVariables>;
 export const CreateSessionDocument = gql`
     mutation CreateSession($name: String!, $pointingMin: Int!, $pointingMax: Int!, $moderator: ParticipantDescription!) {
   createSession(sessionDescription: {name: $name, pointingMin: $pointingMin, pointingMax: $pointingMax}, moderator: $moderator) {
@@ -483,7 +483,7 @@ export const CreateSessionDocument = gql`
   }
 }
     `;
-export type CreateSessionMutationFn = ApolloReactCommon.MutationFunction<CreateSessionMutation, CreateSessionMutationVariables>;
+export type CreateSessionMutationFn = Apollo.MutationFunction<CreateSessionMutation, CreateSessionMutationVariables>;
 
 /**
  * __useCreateSessionMutation__
@@ -505,12 +505,12 @@ export type CreateSessionMutationFn = ApolloReactCommon.MutationFunction<CreateS
  *   },
  * });
  */
-export function useCreateSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateSessionMutation, CreateSessionMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument, baseOptions);
+export function useCreateSessionMutation(baseOptions?: Apollo.MutationHookOptions<CreateSessionMutation, CreateSessionMutationVariables>) {
+        return Apollo.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument, baseOptions);
       }
 export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
-export type CreateSessionMutationResult = ApolloReactCommon.MutationResult<CreateSessionMutation>;
-export type CreateSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
+export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
+export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const JoinSessionDocument = gql`
     mutation JoinSession($sessionID: ID!, $participant: ParticipantDescription) {
   joinSession(sessionID: $sessionID, participant: $participant) {
@@ -538,7 +538,7 @@ export const JoinSessionDocument = gql`
   }
 }
     `;
-export type JoinSessionMutationFn = ApolloReactCommon.MutationFunction<JoinSessionMutation, JoinSessionMutationVariables>;
+export type JoinSessionMutationFn = Apollo.MutationFunction<JoinSessionMutation, JoinSessionMutationVariables>;
 
 /**
  * __useJoinSessionMutation__
@@ -558,12 +558,12 @@ export type JoinSessionMutationFn = ApolloReactCommon.MutationFunction<JoinSessi
  *   },
  * });
  */
-export function useJoinSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<JoinSessionMutation, JoinSessionMutationVariables>) {
-        return ApolloReactHooks.useMutation<JoinSessionMutation, JoinSessionMutationVariables>(JoinSessionDocument, baseOptions);
+export function useJoinSessionMutation(baseOptions?: Apollo.MutationHookOptions<JoinSessionMutation, JoinSessionMutationVariables>) {
+        return Apollo.useMutation<JoinSessionMutation, JoinSessionMutationVariables>(JoinSessionDocument, baseOptions);
       }
 export type JoinSessionMutationHookResult = ReturnType<typeof useJoinSessionMutation>;
-export type JoinSessionMutationResult = ApolloReactCommon.MutationResult<JoinSessionMutation>;
-export type JoinSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<JoinSessionMutation, JoinSessionMutationVariables>;
+export type JoinSessionMutationResult = Apollo.MutationResult<JoinSessionMutation>;
+export type JoinSessionMutationOptions = Apollo.BaseMutationOptions<JoinSessionMutation, JoinSessionMutationVariables>;
 export const LeaveSessionDocument = gql`
     mutation LeaveSession($sessionID: ID!, $participantID: ID!) {
   leaveSession(sessionID: $sessionID, participantID: $participantID) {
@@ -591,7 +591,7 @@ export const LeaveSessionDocument = gql`
   }
 }
     `;
-export type LeaveSessionMutationFn = ApolloReactCommon.MutationFunction<LeaveSessionMutation, LeaveSessionMutationVariables>;
+export type LeaveSessionMutationFn = Apollo.MutationFunction<LeaveSessionMutation, LeaveSessionMutationVariables>;
 
 /**
  * __useLeaveSessionMutation__
@@ -611,12 +611,12 @@ export type LeaveSessionMutationFn = ApolloReactCommon.MutationFunction<LeaveSes
  *   },
  * });
  */
-export function useLeaveSessionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LeaveSessionMutation, LeaveSessionMutationVariables>) {
-        return ApolloReactHooks.useMutation<LeaveSessionMutation, LeaveSessionMutationVariables>(LeaveSessionDocument, baseOptions);
+export function useLeaveSessionMutation(baseOptions?: Apollo.MutationHookOptions<LeaveSessionMutation, LeaveSessionMutationVariables>) {
+        return Apollo.useMutation<LeaveSessionMutation, LeaveSessionMutationVariables>(LeaveSessionDocument, baseOptions);
       }
 export type LeaveSessionMutationHookResult = ReturnType<typeof useLeaveSessionMutation>;
-export type LeaveSessionMutationResult = ApolloReactCommon.MutationResult<LeaveSessionMutation>;
-export type LeaveSessionMutationOptions = ApolloReactCommon.BaseMutationOptions<LeaveSessionMutation, LeaveSessionMutationVariables>;
+export type LeaveSessionMutationResult = Apollo.MutationResult<LeaveSessionMutation>;
+export type LeaveSessionMutationOptions = Apollo.BaseMutationOptions<LeaveSessionMutation, LeaveSessionMutationVariables>;
 export const SetIssueDocument = gql`
     mutation SetIssue($sessionID: ID!, $description: IssueDescription!) {
   setReviewingIssue(sessionID: $sessionID, issue: $description) {
@@ -644,7 +644,7 @@ export const SetIssueDocument = gql`
   }
 }
     `;
-export type SetIssueMutationFn = ApolloReactCommon.MutationFunction<SetIssueMutation, SetIssueMutationVariables>;
+export type SetIssueMutationFn = Apollo.MutationFunction<SetIssueMutation, SetIssueMutationVariables>;
 
 /**
  * __useSetIssueMutation__
@@ -664,12 +664,12 @@ export type SetIssueMutationFn = ApolloReactCommon.MutationFunction<SetIssueMuta
  *   },
  * });
  */
-export function useSetIssueMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetIssueMutation, SetIssueMutationVariables>) {
-        return ApolloReactHooks.useMutation<SetIssueMutation, SetIssueMutationVariables>(SetIssueDocument, baseOptions);
+export function useSetIssueMutation(baseOptions?: Apollo.MutationHookOptions<SetIssueMutation, SetIssueMutationVariables>) {
+        return Apollo.useMutation<SetIssueMutation, SetIssueMutationVariables>(SetIssueDocument, baseOptions);
       }
 export type SetIssueMutationHookResult = ReturnType<typeof useSetIssueMutation>;
-export type SetIssueMutationResult = ApolloReactCommon.MutationResult<SetIssueMutation>;
-export type SetIssueMutationOptions = ApolloReactCommon.BaseMutationOptions<SetIssueMutation, SetIssueMutationVariables>;
+export type SetIssueMutationResult = Apollo.MutationResult<SetIssueMutation>;
+export type SetIssueMutationOptions = Apollo.BaseMutationOptions<SetIssueMutation, SetIssueMutationVariables>;
 export const SetVoteDocument = gql`
     mutation SetVote($sessionID: ID!, $participantID: ID!, $vote: VoteDescription!) {
   setVote(sessionID: $sessionID, participantID: $participantID, vote: $vote) {
@@ -697,7 +697,7 @@ export const SetVoteDocument = gql`
   }
 }
     `;
-export type SetVoteMutationFn = ApolloReactCommon.MutationFunction<SetVoteMutation, SetVoteMutationVariables>;
+export type SetVoteMutationFn = Apollo.MutationFunction<SetVoteMutation, SetVoteMutationVariables>;
 
 /**
  * __useSetVoteMutation__
@@ -718,12 +718,12 @@ export type SetVoteMutationFn = ApolloReactCommon.MutationFunction<SetVoteMutati
  *   },
  * });
  */
-export function useSetVoteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetVoteMutation, SetVoteMutationVariables>) {
-        return ApolloReactHooks.useMutation<SetVoteMutation, SetVoteMutationVariables>(SetVoteDocument, baseOptions);
+export function useSetVoteMutation(baseOptions?: Apollo.MutationHookOptions<SetVoteMutation, SetVoteMutationVariables>) {
+        return Apollo.useMutation<SetVoteMutation, SetVoteMutationVariables>(SetVoteDocument, baseOptions);
       }
 export type SetVoteMutationHookResult = ReturnType<typeof useSetVoteMutation>;
-export type SetVoteMutationResult = ApolloReactCommon.MutationResult<SetVoteMutation>;
-export type SetVoteMutationOptions = ApolloReactCommon.BaseMutationOptions<SetVoteMutation, SetVoteMutationVariables>;
+export type SetVoteMutationResult = Apollo.MutationResult<SetVoteMutation>;
+export type SetVoteMutationOptions = Apollo.BaseMutationOptions<SetVoteMutation, SetVoteMutationVariables>;
 export const StartVotingDocument = gql`
     mutation StartVoting($sessionID: ID!) {
   startVoting(sessionID: $sessionID) {
@@ -751,7 +751,7 @@ export const StartVotingDocument = gql`
   }
 }
     `;
-export type StartVotingMutationFn = ApolloReactCommon.MutationFunction<StartVotingMutation, StartVotingMutationVariables>;
+export type StartVotingMutationFn = Apollo.MutationFunction<StartVotingMutation, StartVotingMutationVariables>;
 
 /**
  * __useStartVotingMutation__
@@ -770,12 +770,12 @@ export type StartVotingMutationFn = ApolloReactCommon.MutationFunction<StartVoti
  *   },
  * });
  */
-export function useStartVotingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StartVotingMutation, StartVotingMutationVariables>) {
-        return ApolloReactHooks.useMutation<StartVotingMutation, StartVotingMutationVariables>(StartVotingDocument, baseOptions);
+export function useStartVotingMutation(baseOptions?: Apollo.MutationHookOptions<StartVotingMutation, StartVotingMutationVariables>) {
+        return Apollo.useMutation<StartVotingMutation, StartVotingMutationVariables>(StartVotingDocument, baseOptions);
       }
 export type StartVotingMutationHookResult = ReturnType<typeof useStartVotingMutation>;
-export type StartVotingMutationResult = ApolloReactCommon.MutationResult<StartVotingMutation>;
-export type StartVotingMutationOptions = ApolloReactCommon.BaseMutationOptions<StartVotingMutation, StartVotingMutationVariables>;
+export type StartVotingMutationResult = Apollo.MutationResult<StartVotingMutation>;
+export type StartVotingMutationOptions = Apollo.BaseMutationOptions<StartVotingMutation, StartVotingMutationVariables>;
 export const StopVotingDocument = gql`
     mutation StopVoting($sessionID: ID!) {
   stopVoting(sessionID: $sessionID) {
@@ -803,7 +803,7 @@ export const StopVotingDocument = gql`
   }
 }
     `;
-export type StopVotingMutationFn = ApolloReactCommon.MutationFunction<StopVotingMutation, StopVotingMutationVariables>;
+export type StopVotingMutationFn = Apollo.MutationFunction<StopVotingMutation, StopVotingMutationVariables>;
 
 /**
  * __useStopVotingMutation__
@@ -822,12 +822,12 @@ export type StopVotingMutationFn = ApolloReactCommon.MutationFunction<StopVoting
  *   },
  * });
  */
-export function useStopVotingMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StopVotingMutation, StopVotingMutationVariables>) {
-        return ApolloReactHooks.useMutation<StopVotingMutation, StopVotingMutationVariables>(StopVotingDocument, baseOptions);
+export function useStopVotingMutation(baseOptions?: Apollo.MutationHookOptions<StopVotingMutation, StopVotingMutationVariables>) {
+        return Apollo.useMutation<StopVotingMutation, StopVotingMutationVariables>(StopVotingDocument, baseOptions);
       }
 export type StopVotingMutationHookResult = ReturnType<typeof useStopVotingMutation>;
-export type StopVotingMutationResult = ApolloReactCommon.MutationResult<StopVotingMutation>;
-export type StopVotingMutationOptions = ApolloReactCommon.BaseMutationOptions<StopVotingMutation, StopVotingMutationVariables>;
+export type StopVotingMutationResult = Apollo.MutationResult<StopVotingMutation>;
+export type StopVotingMutationOptions = Apollo.BaseMutationOptions<StopVotingMutation, StopVotingMutationVariables>;
 export const DoesSessionExistDocument = gql`
     query DoesSessionExist($sessionID: ID!) {
   session(sessionID: $sessionID) {
@@ -852,15 +852,15 @@ export const DoesSessionExistDocument = gql`
  *   },
  * });
  */
-export function useDoesSessionExistQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DoesSessionExistQuery, DoesSessionExistQueryVariables>) {
-        return ApolloReactHooks.useQuery<DoesSessionExistQuery, DoesSessionExistQueryVariables>(DoesSessionExistDocument, baseOptions);
+export function useDoesSessionExistQuery(baseOptions?: Apollo.QueryHookOptions<DoesSessionExistQuery, DoesSessionExistQueryVariables>) {
+        return Apollo.useQuery<DoesSessionExistQuery, DoesSessionExistQueryVariables>(DoesSessionExistDocument, baseOptions);
       }
-export function useDoesSessionExistLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DoesSessionExistQuery, DoesSessionExistQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DoesSessionExistQuery, DoesSessionExistQueryVariables>(DoesSessionExistDocument, baseOptions);
+export function useDoesSessionExistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DoesSessionExistQuery, DoesSessionExistQueryVariables>) {
+          return Apollo.useLazyQuery<DoesSessionExistQuery, DoesSessionExistQueryVariables>(DoesSessionExistDocument, baseOptions);
         }
 export type DoesSessionExistQueryHookResult = ReturnType<typeof useDoesSessionExistQuery>;
 export type DoesSessionExistLazyQueryHookResult = ReturnType<typeof useDoesSessionExistLazyQuery>;
-export type DoesSessionExistQueryResult = ApolloReactCommon.QueryResult<DoesSessionExistQuery, DoesSessionExistQueryVariables>;
+export type DoesSessionExistQueryResult = Apollo.QueryResult<DoesSessionExistQuery, DoesSessionExistQueryVariables>;
 export const ParticipantDocument = gql`
     query Participant($participantID: ID!) {
   participant(id: $participantID) {
@@ -886,15 +886,15 @@ export const ParticipantDocument = gql`
  *   },
  * });
  */
-export function useParticipantQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ParticipantQuery, ParticipantQueryVariables>) {
-        return ApolloReactHooks.useQuery<ParticipantQuery, ParticipantQueryVariables>(ParticipantDocument, baseOptions);
+export function useParticipantQuery(baseOptions?: Apollo.QueryHookOptions<ParticipantQuery, ParticipantQueryVariables>) {
+        return Apollo.useQuery<ParticipantQuery, ParticipantQueryVariables>(ParticipantDocument, baseOptions);
       }
-export function useParticipantLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ParticipantQuery, ParticipantQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<ParticipantQuery, ParticipantQueryVariables>(ParticipantDocument, baseOptions);
+export function useParticipantLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ParticipantQuery, ParticipantQueryVariables>) {
+          return Apollo.useLazyQuery<ParticipantQuery, ParticipantQueryVariables>(ParticipantDocument, baseOptions);
         }
 export type ParticipantQueryHookResult = ReturnType<typeof useParticipantQuery>;
 export type ParticipantLazyQueryHookResult = ReturnType<typeof useParticipantLazyQuery>;
-export type ParticipantQueryResult = ApolloReactCommon.QueryResult<ParticipantQuery, ParticipantQueryVariables>;
+export type ParticipantQueryResult = Apollo.QueryResult<ParticipantQuery, ParticipantQueryVariables>;
 export const GetSessionDocument = gql`
     query getSession($sessionID: ID!) {
   session(sessionID: $sessionID) {
@@ -903,6 +903,7 @@ export const GetSessionDocument = gql`
     pointingMax
     pointingMin
     votingStarted
+    createdAt
     expiresIn
     closed
     reviewingIssue {
@@ -939,15 +940,15 @@ export const GetSessionDocument = gql`
  *   },
  * });
  */
-export function useGetSessionQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetSessionQuery, GetSessionQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetSessionQuery, GetSessionQueryVariables>(GetSessionDocument, baseOptions);
+export function useGetSessionQuery(baseOptions?: Apollo.QueryHookOptions<GetSessionQuery, GetSessionQueryVariables>) {
+        return Apollo.useQuery<GetSessionQuery, GetSessionQueryVariables>(GetSessionDocument, baseOptions);
       }
-export function useGetSessionLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSessionQuery, GetSessionQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetSessionQuery, GetSessionQueryVariables>(GetSessionDocument, baseOptions);
+export function useGetSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSessionQuery, GetSessionQueryVariables>) {
+          return Apollo.useLazyQuery<GetSessionQuery, GetSessionQueryVariables>(GetSessionDocument, baseOptions);
         }
 export type GetSessionQueryHookResult = ReturnType<typeof useGetSessionQuery>;
 export type GetSessionLazyQueryHookResult = ReturnType<typeof useGetSessionLazyQuery>;
-export type GetSessionQueryResult = ApolloReactCommon.QueryResult<GetSessionQuery, GetSessionQueryVariables>;
+export type GetSessionQueryResult = Apollo.QueryResult<GetSessionQuery, GetSessionQueryVariables>;
 export const SessionStateChangedDocument = gql`
     subscription SessionStateChanged($sessionID: ID!) {
   sessionStateChanged(id: $sessionID) {
@@ -992,8 +993,8 @@ export const SessionStateChangedDocument = gql`
  *   },
  * });
  */
-export function useSessionStateChangedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<SessionStateChangedSubscription, SessionStateChangedSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<SessionStateChangedSubscription, SessionStateChangedSubscriptionVariables>(SessionStateChangedDocument, baseOptions);
+export function useSessionStateChangedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<SessionStateChangedSubscription, SessionStateChangedSubscriptionVariables>) {
+        return Apollo.useSubscription<SessionStateChangedSubscription, SessionStateChangedSubscriptionVariables>(SessionStateChangedDocument, baseOptions);
       }
 export type SessionStateChangedSubscriptionHookResult = ReturnType<typeof useSessionStateChangedSubscription>;
-export type SessionStateChangedSubscriptionResult = ApolloReactCommon.SubscriptionResult<SessionStateChangedSubscription>;
+export type SessionStateChangedSubscriptionResult = Apollo.SubscriptionResult<SessionStateChangedSubscription>;

@@ -1,8 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { Container } from '@material-ui/core'
-import { MockedProvider, MockedResponse } from '@apollo/react-testing'
-import { FetchResult } from 'apollo-link'
+import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { FetchResult } from '@apollo/client'
 
 import { StartVotingButton } from '~components/session/moderator/StartVotingButton'
 import { SessionProvider } from '~components/core/SessionProvider'

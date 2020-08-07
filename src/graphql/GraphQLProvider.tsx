@@ -1,16 +1,13 @@
-import { ApolloClient } from 'apollo-client'
-import { split } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { setContext } from 'apollo-link-context'
-import { WebSocketLink } from 'apollo-link-ws'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { getMainDefinition } from 'apollo-utilities'
+import { ApolloClient, ApolloProvider, createHttpLink, split } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { InMemoryCache } from '@apollo/client/cache'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { print } from 'graphql/language/printer'
 import React, { FunctionComponent } from 'react'
-import { ApolloProvider } from 'react-apollo'
 import { OperationOptions, SubscriptionClient } from 'subscriptions-transport-ws'
 
-const clientFactory = (): ApolloClient<{}> => {
+const clientFactory = (): ApolloClient<unknown> => {
   const host = process.env.GRAPHQL_API_HOST
   const apiKey = process.env.GRAPHQL_API_KEY
 
@@ -37,7 +34,7 @@ const clientFactory = (): ApolloClient<{}> => {
 
   subClient.use([
     {
-      applyMiddleware(options: OperationOptions, next: Function): void {
+      applyMiddleware(options: OperationOptions, next: () => void): void {
         if (options.query) {
           let query = ''
 
@@ -89,9 +86,21 @@ const clientFactory = (): ApolloClient<{}> => {
     authLink.concat(httpLink)
   )
 
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Session: {
+        fields: {
+          participants: {
+            merge: false,
+          },
+        },
+      },
+    },
+  })
+
   return new ApolloClient({
     link,
-    cache: new InMemoryCache(),
+    cache,
     defaultOptions: {
       query: {
         fetchPolicy: 'cache-first',
@@ -105,5 +114,6 @@ const clientFactory = (): ApolloClient<{}> => {
 
 export const GraphQLProvider: FunctionComponent = props => {
   const client = clientFactory()
+  console.log(client)
   return <ApolloProvider client={client}>{props.children}</ApolloProvider>
 }

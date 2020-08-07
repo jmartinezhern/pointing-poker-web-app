@@ -5,6 +5,7 @@ query getSession($sessionID: ID!) {
         pointingMax
         pointingMin
         votingStarted
+        createdAt
         expiresIn
         closed
         reviewingIssue {

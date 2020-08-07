@@ -38,14 +38,17 @@ export const Participants: FunctionComponent = () => {
 
   return (
     <List disablePadding={true}>
-      {participants.sort(sortParticipants).map(participant => (
-        <ListItem className={classes.participantBox} key={participant.id} dense={true}>
-          <Participant
-            participant={participant}
-            showVotes={!participant.isModerator && (!votingStarted || participantID === participant.id)}
-          />
-        </ListItem>
-      ))}
+      {participants
+        .slice()
+        .sort(sortParticipants)
+        .map(participant => (
+          <ListItem className={classes.participantBox} key={participant.id} dense={true}>
+            <Participant
+              participant={participant}
+              showVotes={!participant.isModerator && (!votingStarted || participantID === participant.id)}
+            />
+          </ListItem>
+        ))}
     </List>
   )
 }
