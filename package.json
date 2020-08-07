@@ -59,7 +59,7 @@
     "react-dom": "16.13.1",
     "react-google-charts": "3.0.15",
     "react-router-dom": "5.2.0",
-    "subscriptions-transport-ws": "0.9.16",
+    "subscriptions-transport-ws": "0.9.17",
     "uuid": "8.0.0"
   },
   "devDependencies": {
