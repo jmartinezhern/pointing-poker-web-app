@@ -64,7 +64,7 @@
     "@storybook/addon-actions": "6.0.12",
     "@storybook/addon-links": "6.0.12",
     "@storybook/addon-notes": "5.3.19",
-    "@storybook/addons": "5.3.19",
+    "@storybook/addons": "6.0.16",
     "@storybook/cli": "6.0.12",
     "@storybook/react": "6.0.12",
     "@types/enzyme": "3.10.5",
