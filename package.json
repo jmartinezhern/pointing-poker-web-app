@@ -63,7 +63,7 @@
     "@graphql-codegen/typescript-resolvers": "1.17.7",
     "@storybook/addon-actions": "6.0.21",
     "@storybook/addon-links": "6.0.19",
-    "@storybook/addon-notes": "5.3.19",
+    "@storybook/addon-notes": "5.3.21",
     "@storybook/addons": "6.0.16",
     "@storybook/cli": "6.0.12",
     "@storybook/react": "6.0.20",
