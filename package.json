@@ -65,7 +65,7 @@
     "@storybook/addon-links": "6.0.21",
     "@storybook/addon-notes": "5.3.21",
     "@storybook/addons": "6.0.16",
-    "@storybook/cli": "6.0.12",
+    "@storybook/cli": "6.0.21",
     "@storybook/react": "6.0.20",
     "@types/enzyme": "3.10.6",
     "@types/enzyme-adapter-react-16": "1.0.6",
