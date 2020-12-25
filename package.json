@@ -97,7 +97,7 @@
     "parcel-bundler": "1.12.4",
     "prettier": "2.2.1",
     "ts-jest": "26.4.4",
-    "ts-loader": "8.0.11",
+    "ts-loader": "8.0.12",
     "tsconfig-paths-webpack-plugin": "3.3.0",
     "typescript": "3.9.7"
   },
