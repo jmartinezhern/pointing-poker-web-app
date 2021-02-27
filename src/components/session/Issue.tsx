@@ -119,7 +119,7 @@ export const Issue: FunctionComponent<Props> = ({ allowEditing, issue }) => {
             <Grid container item justify="center" alignItems="center" direction="row" spacing={2}>
               {editing && (
                 <Grid item>
-                  <Button onClick={() => setEditing(false)}>Cancel</Button>
+                  {!loading && <Button onClick={() => setEditing(false)}>Cancel</Button>}
                   <Button
                     onClick={async () => {
                       await setIssue({
