@@ -1,33 +1,28 @@
 import React, { FunctionComponent } from 'react'
-import { List, ListItem } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { Participant as ParticipantType } from '~generated/graphql'
 import { Participant } from '~components/session/participants/Participant'
 import { useParticipant } from '~components/core/ParticipantProvider'
 import { useSession } from '~components/core/SessionProvider'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   participantBox: {
-    width: '300px',
+    marginTop: '5px',
+    marginRight: '5px',
+  },
+  container: {
+    width: '75%',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+  },
+  responsiveAlign: {
+    [theme.breakpoints.down('md')]: {
+      justifyContent: 'center',
+    },
   },
 }))
-
-const sortParticipants = (a: ParticipantType, b: ParticipantType): number => {
-  if (a.isModerator) {
-    return -1
-  } else if (b.isModerator) {
-    return 1
-  }
-
-  if (a.name == b.name) {
-    return 0
-  } else if (a.name > b.name) {
-    return 1
-  }
-
-  return -1
-}
 
 export const Participants: FunctionComponent = () => {
   const { participants, votingStarted } = useSession()
@@ -36,19 +31,41 @@ export const Participants: FunctionComponent = () => {
 
   const classes = useStyles()
 
+  const filteredParticipants = participants.slice()
+
+  const moderatorIdx = filteredParticipants.findIndex(p => p.isModerator)
+  const moderator = filteredParticipants[moderatorIdx]
+
+  filteredParticipants.splice(moderatorIdx, 1)
+
+  let participant = null
+
+  if (moderator.id !== participantID) {
+    const participantIdx = filteredParticipants.findIndex(p => p.id === participantID)
+    participant = filteredParticipants[participantIdx]
+
+    filteredParticipants.splice(participantIdx, 1)
+  }
+
   return (
-    <List disablePadding={true}>
-      {participants
-        .slice()
-        .sort(sortParticipants)
-        .map(participant => (
-          <ListItem className={classes.participantBox} key={participant.id} dense={true}>
-            <Participant
-              participant={participant}
-              showVotes={!participant.isModerator && (!votingStarted || participantID === participant.id)}
-            />
-          </ListItem>
+    <Grid container className={classes.container}>
+      <Grid container className={classes.responsiveAlign}>
+        <Grid item className={classes.participantBox}>
+          <Participant participant={moderator} showVotes={false} />
+        </Grid>
+        {participant ? (
+          <Grid item className={classes.participantBox}>
+            <Participant participant={participant} showVotes={true} />
+          </Grid>
+        ) : null}
+      </Grid>
+      <Grid container alignItems="center" className={classes.responsiveAlign} style={{ marginTop: '20px' }}>
+        {filteredParticipants.map(participant => (
+          <Grid item className={classes.participantBox} key={participant.id}>
+            <Participant participant={participant} showVotes={!votingStarted} />
+          </Grid>
         ))}
-    </List>
+      </Grid>
+    </Grid>
   )
 }

@@ -1,47 +1,41 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { CircularProgress, Collapse, Grid, Modal, Typography } from '@material-ui/core'
+import { CircularProgress, createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
 
 import { Participants } from '~components/session/Participants'
-import { Issue } from '~/components/session/Issue.tsx'
+import { Issue } from '~/components/session/Issue'
 import { Results } from '~components/session/Results'
 import { useSession } from '~components/core/SessionProvider'
 import { useParticipant } from '~components/core/ParticipantProvider'
-import { EditIssue } from '~components/session/moderator/EditIssue'
 import { SessionControls } from '~components/session/moderator/SessionControls'
 import { ParticipantActions } from '~components/session/participants/ParticipantActions'
 import { Session as SessionType, useSessionStateChangedSubscription } from '~generated/graphql'
 
-function expirationTimestamp(delta: number): string {
-  if (delta > 60 * 60) {
-    return `${Math.floor(delta / (60 * 60))} hours`
-  }
-
-  if (delta > 60) {
-    return `${Math.floor(delta / 60)} minutes`
-  }
-
-  return `${delta} seconds`
-}
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      flexDirection: 'row',
+      [theme.breakpoints.down('md')]: {
+        flexDirection: 'column',
+      },
+    },
+  })
+)
 
 export const Session: FunctionComponent = () => {
   let session = useSession()
 
+  const classes = useStyles()
+
   const participant = useParticipant()
 
   const history = useHistory()
-
-  const [modalOpen, setModalOpen] = useState(false)
 
   const { data, loading } = useSessionStateChangedSubscription({
     variables: {
       sessionID: session.id,
     },
   })
-
-  const closeModal = (): void => {
-    setModalOpen(false)
-  }
 
   if (!loading) {
     session = data?.sessionStateChanged as SessionType
@@ -87,55 +81,22 @@ export const Session: FunctionComponent = () => {
 
   return (
     <Grid container justify="center" alignItems="center" direction="column" spacing={4}>
-      <Modal
-        open={modalOpen}
-        onClose={() => {
-          setModalOpen(false)
-        }}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <EditIssue onCancel={closeModal} onConfirm={closeModal} />
-      </Modal>
-      <Grid container item justify="flex-end" alignItems="center" direction="row" spacing={2}>
-        {expires <= 1200 && (
-          <Grid item>
-            <Typography variant="h6" color="error">
-              Session expires in {expirationTimestamp(expires)}
-            </Typography>
-          </Grid>
-        )}
-      </Grid>
       <Grid item>
         <Typography variant="h2">{session.name}</Typography>
       </Grid>
-      <Grid item>
-        <Collapse in={!session.votingStarted}>
+      {participant.isModerator ? <SessionControls /> : <ParticipantActions />}
+      <Grid container justify="center" alignItems="center" className={classes.container}>
+        <Grid container style={{ width: '50%' }}>
           <Results
+            voting={session.votingStarted}
             votes={session.participants
               .filter(participant => !participant.isModerator)
               .map(participant => participant.vote?.points ?? 0)}
           />
-        </Collapse>
-      </Grid>
-      {participant.isModerator ? (
-        <SessionControls
-          onEditIssueClicked={() => {
-            setModalOpen(true)
-          }}
-        />
-      ) : (
-        <ParticipantActions />
-      )}
-      <Grid container item justify="center" direction="row" spacing={2}>
-        <Grid item>
-          <Issue reviewingIssue={session.reviewingIssue} />
         </Grid>
-        <Grid item>
+        <Grid container direction="column" style={{ width: '50%' }}>
           <Participants />
+          <Issue allowEditing={participant.isModerator} issue={session.reviewingIssue} />
         </Grid>
       </Grid>
     </Grid>

@@ -3,7 +3,7 @@ import { Backdrop, CircularProgress, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { ActionButton } from '~components/session/ActionButton.tsx'
+import { ActionButton } from '~components/session/ActionButton'
 import { VotingOptions } from '~components/session/participants/VotingOptions'
 import { useLeaveSessionMutation } from '~generated/graphql'
 import { useSession } from '~components/core/SessionProvider'

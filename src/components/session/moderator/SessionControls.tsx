@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react'
-import { Backdrop, Button, CircularProgress, Grid } from '@material-ui/core'
+import { Backdrop, CircularProgress, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { ActionButton } from '~components/session/ActionButton.tsx'
+import { ActionButton } from '~components/session/ActionButton'
 import { StopVotingButton } from '~components/session/moderator/StopVotingButton'
 import { StartVotingButton } from '~components/session/moderator/StartVotingButton'
 import { useSession } from '~components/core/SessionProvider'
@@ -19,11 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-interface Props {
-  onEditIssueClicked?: () => void
-}
-
-export const SessionControls: FunctionComponent<Props> = ({ onEditIssueClicked }) => {
+export const SessionControls: FunctionComponent = () => {
   const { id: sessionID, votingStarted } = useSession()
 
   const history = useHistory()
@@ -35,18 +31,6 @@ export const SessionControls: FunctionComponent<Props> = ({ onEditIssueClicked }
   return (
     <Grid container item spacing={2} justify="center">
       <Grid item>{votingStarted ? <StopVotingButton /> : <StartVotingButton />}</Grid>
-      <Grid item>
-        <Button
-          className={classes.controlButton}
-          onClick={() => {
-            if (onEditIssueClicked) {
-              onEditIssueClicked()
-            }
-          }}
-        >
-          Edit Reviewing Issue
-        </Button>
-      </Grid>
       <Grid item>
         <Backdrop className={classes.backdrop} open={loading} timeout={500}>
           <CircularProgress />

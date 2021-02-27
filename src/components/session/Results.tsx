@@ -1,20 +1,35 @@
 import React, { FunctionComponent } from 'react'
 import { Chart } from 'react-google-charts'
-import { Grid, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Grid, Typography, useTheme } from '@material-ui/core'
 
 interface Props {
+  voting: boolean
   votes: number[]
 }
 
-export const Results: FunctionComponent<Props> = ({ votes }) => {
+export const Results: FunctionComponent<Props> = ({ votes, voting }) => {
   const theme = useTheme()
-
-  const matches = useMediaQuery(theme.breakpoints.down('xs'))
 
   const abstainers = votes.filter(vote => vote === 0).length
 
+  if (voting) {
+    return (
+      <Grid container spacing={0} justify="center" direction="column" style={{ minHeight: '20vh' }}>
+        <Typography variant="h5" align="center">
+          Voting in progress...
+        </Typography>
+      </Grid>
+    )
+  }
+
   if (votes.length === 0 || votes.length === abstainers) {
-    return <Typography variant="h5">There are no votes</Typography>
+    return (
+      <Grid container spacing={0} justify="center" alignItems="center" direction="column" style={{ minHeight: '20vh' }}>
+        <Typography variant="h5" align="center">
+          There are no votes
+        </Typography>
+      </Grid>
+    )
   }
 
   const distribution = Array.from(
@@ -54,11 +69,11 @@ export const Results: FunctionComponent<Props> = ({ votes }) => {
     <Grid
       container
       item
-      direction={matches ? 'column' : 'row'}
+      direction="column"
       justify="center"
       alignItems="center"
       alignContent="center"
-      spacing={matches ? 2 : 0}
+      style={{ minHeight: '30vh' }}
     >
       <Grid item>
         <Chart

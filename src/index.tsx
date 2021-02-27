@@ -5,7 +5,7 @@ import { CssBaseline, createMuiTheme } from '@material-ui/core'
 import { ThemeProvider } from '@material-ui/styles'
 
 import { StarterScreen } from '~components/starter/StarterScreen'
-import { SessionEntry } from '~components/session/SessionEntry.tsx'
+import { SessionEntry } from '~components/session/SessionEntry'
 import { GraphQLProvider } from '~graphql/GraphQLProvider'
 import { CreateSession } from '~components/create/CreateSession'
 

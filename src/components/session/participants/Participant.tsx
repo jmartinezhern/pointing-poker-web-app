@@ -46,8 +46,12 @@ export const Participant: FunctionComponent<ParticipantProps> = ({
 
   return (
     <Card className={classes.participantCard} style={colors}>
-      <CardContent style={{ flexDirection: 'column' }}>
-        <Typography variant="h5" component="h2">
+      <CardContent style={{ minWidth: '0' }}>
+        <Typography
+          variant="h5"
+          component="h2"
+          style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}
+        >
           {name}
         </Typography>
         {isModerator && (
