@@ -61,7 +61,7 @@
     "@graphql-codegen/typescript-operations": "1.17.15",
     "@graphql-codegen/typescript-react-apollo": "2.2.3",
     "@graphql-codegen/typescript-resolvers": "1.19.0",
-    "@storybook/addon-actions": "6.2.8",
+    "@storybook/addon-actions": "6.2.9",
     "@storybook/addon-links": "6.2.8",
     "@storybook/addon-notes": "5.3.21",
     "@storybook/addons": "6.2.8",
